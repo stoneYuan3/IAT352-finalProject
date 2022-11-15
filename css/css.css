@@ -1,0 +1,353 @@
+html{
+    font-family: Arial, sans-serif;
+}
+
+/* header */
+.navbar {
+    overflow: hidden;
+    background-color:#FFDA57;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar a {
+    float: left;
+    color: #333;
+    text-align: center;
+    padding: 20px 30px;
+    text-decoration: none;
+    font-size: 22px;
+}
+
+.navbar a.active {
+    float: right;
+    margin-top:.25em;
+}
+
+a.active:hover {
+    background-color: #ddd;
+}
+
+ img {
+    height: 40px;
+    width: auto;
+}
+
+/* log in, sign up */
+.login, .signup{
+    margin:auto;
+    margin-top:10em;
+    width: 50%;
+    text-align: center;
+}
+
+/* reference: https://www.w3schools.com/cssref/css3_pr_box-shadow.php */
+.login-area, .signup-area{
+    padding: 2em;
+    border-style:none;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px 10px #ddd;
+    margin-bottom: 2em;
+}
+
+h1{
+    font-size: 36px;
+}
+
+.login h3, .signup h3{
+    font-size: 24px;
+    float: left;
+}
+
+.login input, .signup input{
+    width: 100%;
+    height: auto;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 20px;
+    font-size: 18px;
+    padding: .5em;
+}
+
+.login button, .signup button{
+    margin-top: 2em;   
+}
+
+.selected {
+    background-color:#FFDA57;
+    border-style: none;
+    font-size: 24px;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 10px
+}
+
+.login a, .signup a{
+    color: #D16B0C;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* index */
+.index{
+    margin: 5em;
+}
+
+.unselected{
+    background-color:#fff;
+    border-style: solid;
+    border-color: #FFDA57;
+    font-size: 24px;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 10px
+}
+
+.index button{
+    margin-right: 1em;
+}
+
+.index input{
+    width: 80%;
+    height: auto;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 10px;
+    font-size: 18px;
+    padding: .5em;
+}
+
+.index .top{
+    margin-bottom: 2em;
+}
+
+.index label{
+    font-size: 22px;
+    margin-right: 1em;
+}
+
+.index .search{
+    margin-bottom: 5em;
+}
+
+.index .row{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4Wpx;
+}
+
+.column {
+    flex: 22%;
+    max-width: 22%;
+    padding: 0 10px;
+}
+
+.column .post{
+    margin-top: 8px;
+    vertical-align: middle;
+}
+
+.post-image .user img, .post-thought .user img{
+    width: 12%;
+    height: auto;
+    vertical-align: middle;
+}
+
+.post-image .user .username, .post-thought .user .username {
+    font-size: 14px;
+}
+
+.post-image .user .date, .post-thought .user .date{
+    font-size: 14px;
+}
+
+.content{
+    margin-top: 2em;
+}
+
+.content img{
+    width: 100%;
+    height: auto;
+}
+
+.post-image, .post-thought{
+    border-style:none;
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px 5px #ddd;
+    padding: 1em;
+    margin-bottom: 2em;
+    
+}
+
+.post-image .bottom img, .post-thought .bottom img{
+    width: 10%;
+    height: auto;
+    vertical-align: middle;
+}
+
+.post-image .bottom label, .post-thought .bottom label{
+    font-size: 18px;
+}
+
+.post-image .comment, .post-thought .comment{
+    float: right;
+}
+
+.post-thought a{
+    text-decoration: none;
+    color: #000
+}
+
+/* upload */
+.upload{
+    margin: 5em;
+}
+
+.upload .top{
+    margin-bottom: 2em;
+}
+
+.upload label{
+    font-size: 26px;
+    margin-right: 1em;
+}
+
+.upload a{
+    font-size: 26px;
+    margin-right: 1em;
+}
+
+.upload .select-page{
+    text-decoration: underline solid #FFDA57 40%;
+}
+
+.upload .unselect-page{
+    text-decoration: none;
+    color: #A0A0A0;
+}
+
+.upload h3{
+    font-size: 24px;
+}
+
+.upload-image-box{
+    width: 100%;
+    height: 20%;;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 20px;
+    font-size: 18px;
+    padding-top: 10%;
+    padding-left: 40%;
+}
+
+.upload-tag{
+    width: 100%;
+    height: auto;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 20px;
+    font-size: 18px;
+    padding: .5em;
+}
+
+.upload-des-box{
+    width: 100%;
+    height: 20%;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 20px;
+    font-size: 18px;
+    padding: .5em;
+}
+
+.upload .bottom{
+    text-align: center;
+    margin-top: 2em;
+}
+
+/* detail */
+.detail{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.picture img{
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    height: 40%;
+    display: block;
+}
+
+.picture {
+    background-color: #E2E2E2;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.description img, .user-comments img{
+    width: 3em;
+    height: auto;
+    vertical-align: middle;
+}
+
+.view {
+    float: right;
+    margin-top: .5em;
+}
+
+.tags {
+    width: 100%;
+    height: auto;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 20px;
+    font-size: 14px;
+    padding: .5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.description .username, .user-comments .username{
+    font-size: 18px;
+    margin-right: 1em;
+    margin-left: 1em;
+}
+
+.description .userid, .user-comments .date{
+    font-size: 14px;
+    margin-right: 1em;
+}
+
+.description button, .user-comments button {
+    background-color:#FFDA57;
+    border-style: none;
+    font-size: 16px;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 10px
+}
+
+.my-comment input{
+    width: 75%;
+    height: auto;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 20px;
+    font-size: 16px;
+    padding: .5em;  
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.all-comment p{
+    font-size: 14px;
+}
