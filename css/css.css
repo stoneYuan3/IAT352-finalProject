@@ -126,7 +126,7 @@ h1{
     margin-bottom: 2em;
 }
 
-.index label, .profile .post label{
+.index label, .profile .post label, .user-profile .post label{
     font-size: 22px;
     margin-right: 1em;
 }
@@ -135,7 +135,7 @@ h1{
     margin-bottom: 5em;
 }
 
-.index .row, .profile .row{
+.index .row, .profile .row, .user-profile .row{
     display: flex;
     flex-wrap: wrap;
     padding: 0 4Wpx;
@@ -217,12 +217,12 @@ h1{
     margin-right: 1em;
 }
 
-.upload a, .profile .sub-nav{
+.upload a, .profile .sub-nav, .user-profile .sub-nav{
     font-size: 26px;
     margin-right: 1em;
 }
 
-.upload .select-page, .profile .sub-nav .select-page{
+.upload .select-page, .profile .sub-nav .select-page, .user-profile .sub-nav .select-page{
     text-decoration: underline solid #FFDA57 40%;
 }
 
@@ -353,7 +353,7 @@ h1{
 }
 
 /* profile page */
-.profile .banner{
+.profile .banner, .user-profile .banner{
     background-color: #C7C7C7;
     margin-left: auto;
     margin-right: auto;
@@ -362,30 +362,30 @@ h1{
     display: block;
 }
 
-.profile .bio{
+.profile .bio, .user-profile .bio{
     width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
 
-.profile .bio img{
+.profile .bio img, .user-profile .bio img{
     height: 100px;
     width: auto;
     margin-top: -3em;
 }
 
-.profile .username{
+.profile .username, .user-profile .username{
     font-size: 36px;
     margin-left: .5em;
 }
 
-.profile .userid{
+.profile .userid, .user-profile .userid{
     font-size:18px;
     margin-left: .5em;
     margin-right: .5em;
 }
 
-.profile .bio button{
+.profile .bio button, .user-profile .bio button{
     background-color:#FFDA57;
     border-style: none;
     font-size: 16px;
@@ -400,27 +400,36 @@ h1{
     margin-top: 0;
 }
 
-.profile .post{
+.user-profile .follower{
+    margin-top: 0;
+    margin-left: 1.75em;
+}
+
+.user-profile .bio button{
+    margin-left: .5em;
+}
+
+.profile .post, .user-profile .post{
     width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
 
-.profile .post .sub-nav {
+.profile .post .sub-nav , .user-profile .post .sub-nav{
     margin-bottom: 1.5em;
     margin-top: 1em;
 }
 
-.profile .post .sub-nav a{
+.profile .post .sub-nav a, .user-profile .post .sub-nav a{
     margin-right: 1em;
 }
 
-.profile .post button{
+.profile .post button, .user-profile .post button{
     margin-right: 1em;
     margin-bottom: 1em;
 }
 
-.profile input{
+.profile input, .user-profile input{
     width: 80%;
     height: auto;
     background-color: #EDEDED;
@@ -430,11 +439,11 @@ h1{
     padding: .5em;
 }
 
-.profile hr{
+.profile hr, .user-profile hr{
     width: 90%;
 }
 
-.profile .all{
+.profile .all, .user-profile .all{
     width: 90%;
     margin-left: auto;
     margin-right: auto;
