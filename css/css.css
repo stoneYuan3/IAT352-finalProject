@@ -126,7 +126,7 @@ h1{
     margin-bottom: 2em;
 }
 
-.index label{
+.index label, .profile .post label{
     font-size: 22px;
     margin-right: 1em;
 }
@@ -135,7 +135,7 @@ h1{
     margin-bottom: 5em;
 }
 
-.index .row{
+.index .row, .profile .row{
     display: flex;
     flex-wrap: wrap;
     padding: 0 4Wpx;
@@ -217,12 +217,12 @@ h1{
     margin-right: 1em;
 }
 
-.upload a{
+.upload a, .profile .sub-nav{
     font-size: 26px;
     margin-right: 1em;
 }
 
-.upload .select-page{
+.upload .select-page, .profile .sub-nav .select-page{
     text-decoration: underline solid #FFDA57 40%;
 }
 
@@ -350,4 +350,91 @@ h1{
 
 .all-comment p{
     font-size: 14px;
+}
+
+/* profile page */
+.profile .banner{
+    background-color: #C7C7C7;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    height: 20%;
+    display: block;
+}
+
+.profile .bio{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile .bio img{
+    height: 100px;
+    width: auto;
+    margin-top: -3em;
+}
+
+.profile .username{
+    font-size: 36px;
+    margin-left: .5em;
+}
+
+.profile .userid{
+    font-size:18px;
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
+.profile .bio button{
+    background-color:#FFDA57;
+    border-style: none;
+    font-size: 16px;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 10px
+}
+
+.profile .follower{
+    margin-top: 0;
+}
+
+.profile .post{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile .post .sub-nav {
+    margin-bottom: 1.5em;
+    margin-top: 1em;
+}
+
+.profile .post .sub-nav a{
+    margin-right: 1em;
+}
+
+.profile .post button{
+    margin-right: 1em;
+}
+
+.profile input{
+    width: 80%;
+    height: auto;
+    background-color: #EDEDED;
+    border-style: none;
+    border-radius: 10px;
+    font-size: 18px;
+    padding: .5em;
+}
+
+.profile hr{
+    width: 90%;
+}
+
+.profile .all{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
