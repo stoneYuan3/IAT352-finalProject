@@ -1,6 +1,33 @@
-html{
-    font-family: Arial, sans-serif;
+/*////////////OVERWRITE DEFAULT STYLES/////////////////////*/
+html{font-family:Arial,sans-serif;}
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,figure{ margin:0; padding:0;}
+
+ul, ol{ list-style:none;}
+
+a{ text-decoration: none;color: black; }
+
+ul li{ word-break: break-all; }
+/*/////////////////////////////////////////////////////////*/
+
+h1{
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
 }
+
+/*/////////////////////////////////////////////////////////*/
+.flex{
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-column{
+    flex-direction: column;
+}
+.flex-row{
+    flex-direction: row;
+}
+/*/////////////////////////////////////////////////////////*/
+
 
 /* header */
 .navbar {
@@ -8,14 +35,14 @@ html{
     background-color:#FFDA57;
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 1rem 5rem;
 }
 
 .navbar a {
     float: left;
     color: #333;
     text-align: center;
-    padding: 20px 30px;
+    /*padding: 20px 30px;*/
     text-decoration: none;
     font-size: 22px;
 }
@@ -94,6 +121,7 @@ h1{
 /* index */
 .index{
     margin: 5em;
+    margin-top: 2.5rem;
 }
 
 .unselected{
