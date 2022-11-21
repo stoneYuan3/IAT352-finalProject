@@ -20,24 +20,117 @@ h1{
     display: flex;
     flex-wrap: wrap;
 }
+.flex_center_align_horizontal{
+    /*justify-content: center;*/
+    align-items: center;
+}
+.flex_center_align_vertical{
+    justify-content: center;
+}
+.flex_space_between{
+    justify-content: space-between;
+}
 .flex-column{
     flex-direction: column;
 }
 .flex-row{
     flex-direction: row;
 }
+.flex-full{
+    flex: 1;
+}
 /*/////////////////////////////////////////////////////////*/
 
-.section-allWorks{
-    columns: 3;
+
+/*/////////////////////////////////////////////////////////*/
+figure img, img{
+  /*width: 100%;*/
+  max-width: 100%;
+  height: auto; 
+}
+.logo img{
+    width: 10rem;
+}
+.section-userWorkDisplay{
+    columns: 4;
     column-gap: 1.5rem;
     flex: 1 1 100%;
-    margin: 1rem 0;    
+    margin: 1rem 0;
 }
 
-.section-allWorks div{
+.section-userWorkDisplay-Box{
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: white;
+    filter: drop-shadow(0 0 0.25rem grey);
     break-inside: avoid;
+    max-width: 16rem;
 }
+.section-uploaderInfo{
+    align-items: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #EEEEEE;
+}
+.section-uploaderInfo img{
+    width: 2rem;
+}
+.section-uploaderInfo img, .section-uploaderInfo h4{
+    margin-right: 0.5rem;
+}
+.section-uploaderInfo p{
+    font-size: 0.75rem;
+}
+
+.section-workdisplay{
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #EEEEEE;   
+}
+.section-workdisplay h3{
+    margin: 0.5rem 0;
+}
+.section-workdisplay p{
+    font-size: 0.75rem;
+    margin: 0.5rem 0;
+}
+.section-workdisplay a{
+    display: flex;
+    align-items: center;
+    font-size: 0.5rem;
+}
+.section-workdisplay a img{
+    margin-right: 0.5rem;
+}
+
+.section-workInteractButtons{
+    justify-content: space-between;
+    margin-top: 0.5rem;
+}
+.section-workInteractButtons button{
+    display: flex;
+    background: none;
+    border: none;
+    align-items: center;    
+}
+.section-workInteractButtons.section-projectpost button{
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    width: 100%;
+    background-color: #FFDA57;
+    font-weight: bold;
+}
+.section-workInteractButtons img{
+    margin-right: 0.25rem;
+    height: 1.5rem;
+}
+
+
+/*/////////////////////////////////////////////////////////*/
+
+
+
 
 
 /* header */
@@ -67,10 +160,10 @@ a.active:hover {
     background-color: #ddd;
 }
 
- img {
+/* img {
     height: 40px;
     width: auto;
-}
+}*/
 
 /* log in, sign up */
 .login, .signup{
