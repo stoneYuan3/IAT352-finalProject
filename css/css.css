@@ -57,7 +57,6 @@ figure img, img{
     flex: 1 1 100%;
     margin: 1rem 0;
 }
-
 .section-userWorkDisplay-Box{
     border-radius: 1rem;
     margin-bottom: 1rem;
@@ -116,6 +115,9 @@ figure img, img{
     border: none;
     align-items: center;    
 }
+
+
+
 .section-workInteractButtons.section-projectpost button{
     display: flex;
     justify-content: center;
@@ -130,7 +132,27 @@ figure img, img{
     height: 1.5rem;
 }
 
-
+.section-userInfo-text{
+    margin-left: 2rem;
+    margin-top: 1rem;
+}
+.section-userInfo-text div{
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.section-userInfo-text h1{
+    margin: 0;
+    margin-right: 0.5rem;
+}
+.section-userInfo-text p{
+    margin-right: 0.5rem;
+}
+/*.follower{
+    margin-bottom: 1rem;
+}*/
+.user-desc{
+    margin-bottom: 0.5rem;
+}
 /*/////////////////////////////////////////////////////////*/
 
 
@@ -543,7 +565,7 @@ h1{
 
 .user-profile .follower{
     margin-top: 0;
-    margin-left: 1.75em;
+    /*margin-left: 1.75em;*/
 }
 
 .user-profile .bio button{

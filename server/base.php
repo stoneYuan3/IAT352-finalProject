@@ -97,15 +97,22 @@
 		                    <!-- img or grey background-->
 		                    <img src="uploads/images/'.$output1['album_cover'].'">
 		                </section>
-		                <section class="bio">
-		                    <img src="uploads/images/'.$output1['avatar'].'">
-		                    <label class="username"><strong>'.$output1['user_name'].'</strong></label>
-		                    <label class="userid">@'.$output1['user_id'].'</label>
-		                    <br>
-		                    
-		                    <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
-		                    <label class="follower"><strong>'.$output1['followers'].' followers</strong></label>
-		                    <p>'.$output1['description'].'</p>
+		                <section class="bio flex flex-row">
+		                	<div class="flex flex-column">
+			                    <img src="uploads/images/'.$output1['avatar'].'">
+			                    <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+		                    </div>
+
+		                   	<div class="flex flex-column section-userInfo-text">
+			                    <div class="flex flex-row">
+				                    <h1>'.$output1['user_name'].'</h1>
+				                    <p>@'.$output1['user_id'].'</p>
+				          			<p>|</p>
+				                    <p class="follower">'.$output1['followers'].' followers</p>
+			                    </div>
+			                    
+			                    <p class="user-desc">'.$output1['description'].'</p>
+		                    <div>
 		                </section>
 					';
 				}
