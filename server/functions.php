@@ -38,10 +38,11 @@ function checkWatchlist($db, $product_code, $session){
 
     function generatePosts($array){
         $output_arr_final=$array;
+        $final_result=[];
         for($i=0;$i<count($output_arr_final);$i++){
             $output_each=$output_arr_final[$i];
             if($output_arr_final[$i]['category']==1){
-                echo '
+                $v= '
                 <div class="flex flex-column section-userWorkDisplay-Box">
                 <div class="flex flex-row section-uploaderInfo">
                 <a href="user-profile.html?userid='.$output_each['user_id'].'" class="flex flex-row flex_center_align_horizontal">
@@ -61,9 +62,10 @@ function checkWatchlist($db, $product_code, $session){
                 </div>                                      
                 </div>                      
                 ';
+                array_push($final_result,$v);
             }
             else{
-                echo '
+                $v= '
                 <div class="flex flex-column section-userWorkDisplay-Box">
                 <div class="flex flex-row section-uploaderInfo">
                 <a href="user-profile.html?userid='.$output_each['user_id'].'" class="flex flex-row flex_center_align_horizontal">
@@ -82,9 +84,12 @@ function checkWatchlist($db, $product_code, $session){
                 <button><img src="img/icon-comment.svg">'.$output_each['comment_num'].'</button>
                 </div>                                      
                 </div>                      
-                ';                      
+                ';    
+                array_push($final_result,$v);                  
             }
-        }        
+        }   
+        //return the array $final_result
+        return $final_result;     
     }
 
 ?>

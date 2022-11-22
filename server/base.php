@@ -28,7 +28,8 @@
 				}
 
 				//categolary 1 is image, 2 is pure text
-				generatePosts($output_arr_final);
+				//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.
+				echo json_encode(generatePosts($output_arr_final));
 				break;
 
 
@@ -40,7 +41,7 @@
 					$result1=$database->query($query1);
 					$output1=$result1->fetch_assoc();
 					// this is the html layout for user bio
-					echo '
+					$v1= '
 		                <section class="banner">
 		                    <!-- img or grey background-->
 		                    <img src="uploads/images/'.$output1['album_cover'].'">
@@ -65,14 +66,14 @@
 					';
 
 					//querying posts posted by this user
-					$query1="SELECT post_id FROM posts WHERE posts.user_id=1 ORDER BY upload_time DESC LIMIT 12";
+					$query1="SELECT post_id FROM posts WHERE posts.user_id=".$uid." ORDER BY upload_time DESC LIMIT 12";
 					$result1=$database->query($query1);
 					$output1_arr=[];
 					for($i=0;$i<$result1->num_rows;$i++){
 						$output_each=$result1->fetch_row();
 						array_push($output1_arr,$output_each[0]);
 					}
-					print_r($output1_arr);
+					// print_r($output1_arr);
 					$output_arr_final=[];
 					for($i=0;$i<count($output1_arr);$i++){
 						$id=$output1_arr[$i];
@@ -81,7 +82,12 @@
 							$output2=$result2->fetch_assoc();
 							array_push($output_arr_final,$output2);						
 					}
-					generatePosts($output_arr_final);
+					$v2=generatePosts($output_arr_final);
+					$arr=['bio' => $v1,'userpost' => $v2];
+					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.	
+					//In this case the array $arr containing two modules (user bio and user posts), which are raw HTML codes stored in array. It is tranfered back to the front end. The front end can now insert those two modules into different parts of the page, which cannot be done if php simply transfer pure html.			
+					echo json_encode($arr);
+					// print_r($arr);
 				}
 				break;
 		}
