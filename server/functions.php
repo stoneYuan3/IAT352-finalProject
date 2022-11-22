@@ -5,7 +5,7 @@
     $dbuser="root";
     $dbpass="";
     // $dbname="geodatatest";
-    $dbname="iat438-individualproject";	
+    $dbname="garage";	
 ?>
 
 <?php

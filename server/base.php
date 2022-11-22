@@ -6,122 +6,89 @@
 	$database=db_connect($dbhost,$dbuser,$dbpass,$dbname);
 
 
-	if(isset($_GET['request'])){
+	if(isset($_GET['query'])){
 
-		switch($_GET['request']){
-			case 0:
-				//JSON_OBJECT() is used to stick non JSON variables together into a JSON object
-				//not needed when the data stored is already vaild JSON (in fact it causes issues)
-				$query_1="SELECT properties,postal_code,num_of_cases FROM postal_code_map";
-
-				////
-				$q2="SELECT postal_code_map.postal_code FROM postal_code_map";
-				$s1=$database->query($q2);
-				$arr1=[];
-				for($i=0;$i<$s1->num_rows;$i++){
-					$result=$s1->fetch_row();
-					//0 is JSON, 1 is postal code, 2 is number of cases
-					array_push($arr1,$result[0]);
-				}				
-				// print_r($arr1);
-				$arr2=[];
-				for($i=0;$i<count($arr1);$i++){
-					$code_each=$arr1[$i];
-					$q3="SELECT postal_code_map.properties, postal_code_map.postal_code, COUNT(theft_report.postal_code) FROM postal_code_map,theft_report WHERE postal_code_map.postal_code=theft_report.postal_code AND postal_code_map.postal_code='".$code_each."'";
-					$s2=$database->query($q3);
-					$result=$s2->fetch_row();
-					array_push($arr2,$result);
+		switch($_GET['query']){
+			case 'loadIndex':
+				$query1="SELECT post_id from posts ORDER BY upload_time DESC LIMIT 12";
+				$result1=$database->query($query1);
+				$output1_arr=[];
+				for($i=0;$i<$result1->num_rows;$i++){
+					$output_each=$result1->fetch_row();
+					array_push($output1_arr,$output_each[0]);
 				}
-				// print_r($arr2);
-				echo json_encode($arr2);
-				////
+				// print_r($output1_arr);
 
-				// $search=$database->query($query_1);
-				// $output_arr=[];
-				// $output='[';
-				// for($i=0;$i<$search->num_rows;$i++){
-				// 	$result=$search->fetch_row();
-				// 	//0 is JSON, 1 is postal code, 2 is number of cases
-				// 	$arr_each=[$result[0],$result[1],$result[2]];
-				// 	array_push($output_arr,$arr_each);
-				// }
-
-				// for($i=0;$i<count($output_arr);$i++){
-				// 	$output.=$output_arr[$i][0];
-				// 	$output.=',';
-				// }
-				// $output_final=rtrim($output,',');
-				// $output_final.=']';
-				// print_r($output_final);
-				// echo json_encode($output_arr);
-				// print_r($output_arr);
-				break;
-
-			case 1:
-				if(isset($_GET['code'])){
-					$code=$_GET['code'];
-					$query_1="SELECT postal_code_map.postal_code,COUNT(theft_report.postal_code) FROM postal_code_map,theft_report WHERE postal_code_map.postal_code='".$code."'AND postal_code_map.postal_code=theft_report.postal_code";
-					$result=$database->query($query_1);
-					$output=$result->fetch_row();
-					// print_r($output);
-					echo json_encode($output);
+				$output_arr_final=[];
+				for($i=0;$i<count($output1_arr);$i++){
+					$id=$output1_arr[$i];
+					$query2="SELECT posts.category,users.avatar,users.user_name,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
+					// $query3="SELECT COUNT(post_id) AS comment_num FROM comments WHERE post_id='".$id."'";	
+					// print_r($query2);
+					$result2=$database->query($query2);
+					// $result3=$database->query($query3);
+					$output2=$result2->fetch_assoc();
+					// $output3=$result3->fetch_assoc();
+					// $output_each=array_push($output2,$output3['comment_num']);
+					array_push($output_arr_final,$output2);
 				}
-				break;
-
-			case 2:
-				if(isset($_GET['code'])){
-					$code=$_GET['code'];
-					$query_1="SELECT theft_report.postal_code,theft_report.report_date,bikes.manufacturer,bikes.model,bikes.type,images.img_link FROM theft_report,bikes,images WHERE theft_report.postal_code='".$code."' AND theft_report.bike_id=bikes.id AND bikes.id=images.bike_id";
-					$query_title="SELECT postal_code_map.`postal_code`,COUNT(theft_report.`postal_code`) AS case_num FROM theft_report,postal_code_map WHERE postal_code_map.postal_code='".$code."' AND postal_code_map.postal_code=theft_report.postal_code";
-					$result=$database->query($query_1);
-					$result_title=$database->query($query_title);
-					$output_title=$result_title->fetch_assoc();
-
-					$output_array=[];
-
-					echo '
-			            <div class="flex flex-column section-titleBar">
-			              <div class="flex flex-row">
-			                <h1>'.$output_title['postal_code'].'</h1>
-			                <button id="section-close"><img src=""></button>
-			              </div>
-			              <p>'.$output_title['case_num'].' cases last month
-			            </div>
-					';
-
-					echo '<div class="flex flex-column section-allCases">';
-					for($i=0;$i<$result->num_rows;$i++){
-						$output_each=$result->fetch_assoc();
-						// print_r($output_each);
-						// array_push($output_array,$output_each);
+				// print_r($output_arr_final);
+				//categolary 1 is image, 2 is pure text
+				for($i=0;$i<count($output_arr_final);$i++){
+					$output_each=$output_arr_final[$i];
+					if($output_arr_final[$i]['category']==1){
 						echo '
-			              <div class="flex flex-row section-caseReport">
-			                <img src='.$output_each['img_link'].'>
-			                <div class="flex flex-column section-case-texts">
-			                  <h2>'. $output_each['manufacturer'] . ' ' . $output_each['model'] . '</h2>    
-			                  <p>reported on '. $output_each['report_date'] .'</p>
-			                </div>
-			              </div>							
+			                <div class="flex flex-column section-userWorkDisplay-Box">
+			                    <div class="flex flex-row section-uploaderInfo">
+			                        <a href="user-profile.html" class="flex flex-row flex_center_align_horizontal">
+			                            <img src="uploads/images/'.$output_each['avatar'].'">
+			                            <h4>'.$output_each['user_name'].'</h4>
+			                        </a>
+			                        <p>'.$output_each['upload_time'].'</p>
+			                    </div>
+			                    <div class="flex flex-column section-workdisplay">
+			                        <a href="detail.html">
+			                            <img src="uploads/images/'.$output_each['image_content'].'">
+			                        </a>
+			                    </div>      
+			                    <div class="flex flex-row section-workInteractButtons">
+			                        <button><img src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
+			                        <button><img src="img/icon-comment.svg">'.$output_each['comment_num'].'</button>
+			                    </div>                                      
+			                </div>						
 						';
 					}
-					echo '</div>';
-					// print_r($output_array);
-					// for($i=0;$i<count($output_array);$i++){
-
-					// }
-					// echo json_encode($output_array);	
+					else{
+						echo '
+			                <div class="flex flex-column section-userWorkDisplay-Box">
+			                    <div class="flex flex-row section-uploaderInfo">
+			                        <a href="user-profile.html" class="flex flex-row flex_center_align_horizontal">
+			                            <img src="uploads/images/'.$output_each['avatar'].'">
+			                            <h4>'.$output_each['user_name'].'</h4>
+			                        </a>
+			                        <p>'.$output_each['upload_time'].'</p>
+			                    </div>
+			                    <div class="flex flex-column section-workdisplay">
+			                        <a href="detail.html">
+			                            <p>'.$output_each['description'].'</p>
+			                        </a>
+			                    </div>      
+			                    <div class="flex flex-row section-workInteractButtons">
+			                        <button><img src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
+			                        <button><img src="img/icon-comment.svg">'.$output_each['comment_num'].'</button>
+			                    </div>                                      
+			                </div>						
+						';						
+					}
 				}
 				break;
 		}
 
 	}//END if(isset($_GET['request']))//////////////////
 
-              // <div class="flex flex-row section-caseReport">
-              //   <img src='img/case1.jpeg'>
-              //   <div class="flex flex-column section-case-texts">
-              //     <h2>2021 Black Rad Power Bikes Rad Mini 4 Electric Bike</h2>    
-              //     <p>reported on 12/10/2022</p>
-              //   </div>
-              // </div>
+
+// SELECT posts.category,users.avatar,users.user_name,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id=1 AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id
+
+// SELECT posts.category,users.avatar,users.user_name,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id=1 AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id
 ?>
 

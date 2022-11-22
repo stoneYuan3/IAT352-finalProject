@@ -74,6 +74,7 @@ figure img, img{
 }
 .section-uploaderInfo img{
     width: 2rem;
+    border-radius: 3rem;
 }
 .section-uploaderInfo img, .section-uploaderInfo h4{
     margin-right: 0.5rem;
@@ -92,6 +93,9 @@ figure img, img{
 .section-workdisplay p{
     font-size: 0.75rem;
     margin: 0.5rem 0;
+    max-width: 100%;
+    max-height: 8rem;
+    overflow-y: hidden;
 }
 .section-workdisplay a{
     display: flex;
