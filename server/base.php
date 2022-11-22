@@ -2,9 +2,9 @@
 
 <?php
 	require_once('functions.php');
-
 	$database=db_connect($dbhost,$dbuser,$dbpass,$dbname);
 
+	session_start();
 
 	if(isset($_GET['query'])){
 
@@ -22,7 +22,7 @@
 				$output_arr_final=[];
 				for($i=0;$i<count($output1_arr);$i++){
 					$id=$output1_arr[$i];
-					$query2="SELECT posts.category,users.avatar,users.user_name,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
+					$query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
 					// $query3="SELECT COUNT(post_id) AS comment_num FROM comments WHERE post_id='".$id."'";	
 					// print_r($query2);
 					$result2=$database->query($query2);
@@ -40,14 +40,14 @@
 						echo '
 			                <div class="flex flex-column section-userWorkDisplay-Box">
 			                    <div class="flex flex-row section-uploaderInfo">
-			                        <a href="user-profile.html" class="flex flex-row flex_center_align_horizontal">
+			                        <a href="user-profile.html?userid='.$output_each['user_id'].'" class="flex flex-row flex_center_align_horizontal">
 			                            <img src="uploads/images/'.$output_each['avatar'].'">
 			                            <h4>'.$output_each['user_name'].'</h4>
 			                        </a>
 			                        <p>'.$output_each['upload_time'].'</p>
 			                    </div>
 			                    <div class="flex flex-column section-workdisplay">
-			                        <a href="detail.html">
+			                        <a href="detail.html?post='.$output_each['post_id'].'">
 			                            <img src="uploads/images/'.$output_each['image_content'].'">
 			                        </a>
 			                    </div>      
@@ -62,14 +62,14 @@
 						echo '
 			                <div class="flex flex-column section-userWorkDisplay-Box">
 			                    <div class="flex flex-row section-uploaderInfo">
-			                        <a href="user-profile.html" class="flex flex-row flex_center_align_horizontal">
+			                        <a href="user-profile.html?userid='.$output_each['user_id'].'" class="flex flex-row flex_center_align_horizontal">
 			                            <img src="uploads/images/'.$output_each['avatar'].'">
 			                            <h4>'.$output_each['user_name'].'</h4>
 			                        </a>
 			                        <p>'.$output_each['upload_time'].'</p>
 			                    </div>
 			                    <div class="flex flex-column section-workdisplay">
-			                        <a href="detail.html">
+			                        <a href="detail.html?post='.$output_each['post_id'].'">
 			                            <p>'.$output_each['description'].'</p>
 			                        </a>
 			                    </div>      
@@ -80,6 +80,34 @@
 			                </div>						
 						';						
 					}
+				}
+				break;
+
+
+			case 'loadUser':
+				if(isset($_GET['uid'])){
+					$uid=$_GET['uid'];
+					// echo $uid;
+					$query1="SELECT users.user_id,users.user_name,users.avatar,users.album_cover,users.description, COUNT(following.followed_user_id) AS followers FROM users, following WHERE users.user_id=".$uid." AND users.user_id=following.followed_user_id";
+					$result1=$database->query($query1);
+					$output1=$result1->fetch_assoc();
+					// print_r($output1);
+					echo '
+		                <section class="banner">
+		                    <!-- img or grey background-->
+		                    <img src="uploads/images/'.$output1['album_cover'].'">
+		                </section>
+		                <section class="bio">
+		                    <img src="uploads/images/'.$output1['avatar'].'">
+		                    <label class="username"><strong>'.$output1['user_name'].'</strong></label>
+		                    <label class="userid">@'.$output1['user_id'].'</label>
+		                    <br>
+		                    
+		                    <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+		                    <label class="follower"><strong>'.$output1['followers'].' followers</strong></label>
+		                    <p>'.$output1['description'].'</p>
+		                </section>
+					';
 				}
 				break;
 		}
