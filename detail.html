@@ -18,45 +18,63 @@
         </section>
 
         <section class="detail">
-            <section class="picture">
-                <img src="img/example-image2.png">
-            </section>
-            <section class="description">
-                <img src="img/liked.png">
-                <label>191</label>
-                <img src="img/comment.png">
-                <label>10</label>
-                <label class="view">13452 views</label>
-                <section class="tags">
-                    <p>#drawing #digital drawing #fantasy #robotics</p>
+            <section class="section-detail-mainContent">
+                <section class="picture">
+                    <img src="img/example-image2.png">
                 </section>
-                <p>This is a lovely description posted by username</p>
-                <br><img src="img/icon.png">
-                <label class="username"><a href="user-profile.html">Username</a></label>
-                <label class="userid"> @userid</label>
-                <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+                <section class="description">
+                    <img src="img/liked.png">
+                    <label>191</label>
+                    <img src="img/comment.png">
+                    <label>10</label>
+                    <label class="view">13452 views</label>
+                    <section class="tags">
+                        <p>#drawing #digital drawing #fantasy #robotics</p>
+                    </section>
+                    <p>This is a lovely description posted by username</p>
+                    <br><img src="img/icon.png">
+                    <label class="username"><a href="user-profile.html">Username</a></label>
+                    <label class="userid"> @userid</label>
+                    <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+                </section>
             </section>
             <hr>
             <section class="user-comments">
-                <h1>Comments</h1>
-                <section class="my-comment">
+                <p class="comment-title"><strong>Comments</strong></p>
+                <section class="my-comment flex flex-row flex_center_align_horizontal">
                     <img src="img/icon.png">
                     <input type="comments" placeholder="">
                     <button class ="selected" type="send" value="send"><strong>Send</strong></button>
                 </section><br><br>
                 <section class="all-comment">
-                    <img src="img/icon.png">
-                    <label class="username"><a href="user-profile.html">Username</a></label>
-                    <label class="date"> Posted on 2022-11-07</label>
-                    <p>Exciting, doubleplusgood, work.</p>
-                    <br><hr><br>
-                    <img src="img/icon.png">
-                    <label class="username"><a href="user-profile.html">Username</a></label>
-                    <label class="date"> Posted on 2022-11-07</label>
-                    <p>Exciting, doubleplusgood, work.</p>
-                    <br><hr><br>
+
+                    <section class="section-commentUnit flex flex-row">
+                        <img src="img/icon.png">
+                        <div class="section-comment-content flex flex-column">
+                            <div class="flex flex-row flex_center_align_horizontal">
+                                <a href="user-profile.html">Username</a>
+                                <p class="date"> Posted on 2022-11-07</p>
+                            </div>
+                            <p>Exciting, doubleplusgood, work.</p>  
+                        </div>                      
+                    </section>
+
+                    <section class="section-commentUnit flex flex-row">
+                        <img src="img/icon.png">
+                        <div class="section-comment-content flex flex-column">
+                            <div class="flex flex-row flex_center_align_horizontal">
+                                <a href="user-profile.html">Username</a>
+                                <p class="date"> Posted on 2022-11-07</p>
+                            </div>
+                            <p>Exciting, doubleplusgood, work.</p>  
+                        </div>                      
+                    </section>
+
                 </section>
             </section>
         </section>
     </body>
+    <script src="js/jquery-3.6.1.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/post-detail.js"></script>
 </html>

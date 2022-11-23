@@ -103,6 +103,9 @@ figure img, img{
 }
 .section-workdisplay a img{
     margin-right: 0.5rem;
+    width: 100%;
+/*    max-height: 10rem;
+    object-fit: cover;*/
 }
 
 .section-workInteractButtons{
@@ -135,6 +138,7 @@ figure img, img{
 .section-userInfo-text{
     margin-left: 2rem;
     margin-top: 1rem;
+    flex-basis: 65%;
 }
 .section-userInfo-text div{
     align-items: center;
@@ -147,9 +151,33 @@ figure img, img{
 .section-userInfo-text p{
     margin-right: 0.5rem;
 }
-/*.follower{
-    margin-bottom: 1rem;
-}*/
+
+.all-comment{
+    padding-bottom: 2rem;
+}
+.comment-title{
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem 0;
+}
+.section-commentUnit{
+    padding: 1rem 0;
+    border-bottom: 1px solid grey;
+}
+.section-comment-content{
+    margin-left: 1rem;
+    flex-basis: 80%;
+}
+.section-comment-content div{
+    margin-bottom: 0.5rem;
+}
+.section-comment-content div a{
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+.section-comment-content div p,.section-comment-content div a{
+    margin-right: 0.5rem;
+}
+
 .user-desc{
     margin-bottom: 0.5rem;
 }
@@ -381,7 +409,7 @@ h1{
 }
 
 .upload .select-page, .profile .sub-nav .select-page, .user-profile .sub-nav .select-page{
-    text-decoration: underline solid #FFDA57 40%;
+    text-decoration: underline solid #FFDA57 5px;
 }
 
 .upload .unselect-page{
@@ -450,8 +478,10 @@ h1{
 }
 
 .description img, .user-comments img{
-    width: 3em;
-    height: auto;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 3rem;
+    object-fit: cover;
     vertical-align: middle;
 }
 
@@ -556,7 +586,8 @@ h1{
     padding-bottom: .5em;
     padding-left: 1em;
     padding-right: 1em;
-    border-radius: 10px
+    border-radius: 10px;
+    margin-top: 1rem;
 }
 
 .profile .follower{

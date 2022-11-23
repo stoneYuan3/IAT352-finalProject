@@ -92,6 +92,59 @@ function checkWatchlist($db, $product_code, $session){
         return $final_result;     
     }
 
+
+    function generatePostDetail($array){
+        $output1=$array;
+        $v1='';
+        if($output1['category']==1){
+            $v1= '
+            <section class="section-detail-mainContent">
+            <section class="picture">
+            <img src="uploads/images/'.$output1['image_content'].'">
+            </section>
+            <section class="description">
+            <img src="img/liked.png">
+            <label>'.$output1['collec_num'].'</label>
+            <img src="img/comment.png">
+            <label>'.$output1['comment_num'].'</label>
+            <label class="view">13452 views</label>
+            <section class="tags">
+            </section>
+            <p>'.$output1['description'].'</p>
+            <br><img src="uploads/images/'.$output1['avatar'].'">
+            <label class="username"><a href="user-profile.html?uid='.$output1['user_id'].'">'.$output1['user_name'].'</a></label>
+            <label class="userid"> @'.$output1['user_id'].'</label>
+            <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+            </section>
+            </section>                      
+            ';          
+        }
+        else{
+            $v1= '
+            <section class="section-detail-mainContent">
+            <section class="picture">
+            <p>'.$output1['description'].'</p>
+            </section>
+            <section class="description">
+            <img src="img/liked.png">
+            <label>'.$output1['collec_num'].'</label>
+            <img src="img/comment.png">
+            <label>'.$output1['comment_num'].'</label>
+            <label class="view">13452 views</label>
+            <section class="tags">
+            </section>
+            <br><img src="uploads/images/'.$output1['avatar'].'">
+            <label class="username"><a href="user-profile.html?uid='.$output1['user_id'].'">'.$output1['user_name'].'</a></label>
+            <label class="userid"> @'.$output1['user_id'].'</label>
+            <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+            </section>
+            </section>                      
+            ';             
+        }
+        //return the array $final_result
+        return $v1;     
+    }
+
 ?>
 
 

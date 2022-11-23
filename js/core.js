@@ -23,6 +23,7 @@ function pullUserProfile(uid){
 		data:{},
 		dataType:'text',
 		success:function(data){
+			//receive json from php, parse it, insert into different html sections
 			var result=JSON.parse(data);
 			$('.user-basicInfo').html(result.bio);
 			$('.section-userWorkDisplay').html(result.userpost);
@@ -32,17 +33,21 @@ function pullUserProfile(uid){
 		}
 	});		
 }
-// function pullUserPosts(uid){
-// 	$.ajax({
-// 		type:'POST',
-// 		url:'server/base.php?query=loadUser&uid='+uid,
-// 		data:{},
-// 		dataType:'text',
-// 		success:function(data){
-// 			$('.user-basicInfo').html(data);
-// 		},
-// 		error:function(data){
-// 			console.log("an error happened, transaction failed");
-// 		}
-// 	});		
-// }
+function pullPostDetail(post){
+	$.ajax({
+		type:'POST',
+		url:'server/base.php?query=loadPostDetail&post='+post,
+		data:{},
+		dataType:'text',
+		success:function(data){
+			//receive json from php, parse it, insert into different html sections
+			var result=JSON.parse(data);
+			$('.section-detail-mainContent').html(result.main);
+			$('.tags').html(result.tag);
+			$('.all-comment').html(result.comment);
+		},
+		error:function(data){
+			console.log("an error happened, transaction failed");
+		}
+	});	
+}

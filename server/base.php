@@ -10,7 +10,8 @@
 
 		switch($_GET['query']){
 			case 'loadIndex':
-				$query1="SELECT post_id from posts ORDER BY upload_time DESC LIMIT 12";
+				// $query1="SELECT post_id from posts ORDER BY upload_time DESC LIMIT 12";
+				$query1="SELECT post_id from posts ORDER BY upload_time DESC";
 				$result1=$database->query($query1);
 				$output1_arr=[];
 				for($i=0;$i<$result1->num_rows;$i++){
@@ -87,9 +88,64 @@
 					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.	
 					//In this case the array $arr containing two modules (user bio and user posts), which are raw HTML codes stored in array. It is tranfered back to the front end. The front end can now insert those two modules into different parts of the page, which cannot be done if php simply transfer pure html.			
 					echo json_encode($arr);
-					// print_r($arr);
 				}
 				break;
+
+			case 'loadPostDetail':
+				if(isset($_GET['post'])){
+					$post_id=$_GET['post'];
+					$query_main="SELECT posts.post_id,posts.category,images.image_content,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) as comment_num,posts.description,users.user_id,users.user_name,users.avatar FROM posts,images,collection,users,comments WHERE posts.post_id=".$post_id." AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id AND posts.user_id=users.user_id";
+					$result_main=$database->query($query_main);
+					$output_main=$result_main->fetch_assoc();
+
+					$query_tag="SELECT posts.post_id,tags.tag_name FROM posts,tags WHERE posts.post_id=".$post_id." AND posts.post_id=tags.post_id";
+					$result_tag=$database->query($query_tag);
+					$output_tag=[];
+					for($i=0;$i<$result_tag->num_rows;$i++){
+						$output_tag_each=$result_tag->fetch_assoc();
+						array_push($output_tag,$output_tag_each);
+					}
+					$v2='<p>';
+					if(count($output_tag)!=0){
+						for($i=0;$i<count($output_tag);$i++){
+							$v2.= '#'.$output_tag[$i]['tag_name'].' ';
+						}
+					}
+					else{
+						$v2.='no tags available';
+					}
+					$v2.= '</p>';
+
+					$query_comment="SELECT posts.post_id,users.user_id,users.avatar,users.user_name,comments.content,comments.upload_time FROM posts,users,comments WHERE posts.post_id=".$post_id." AND posts.post_id=comments.post_id AND users.user_id=comments.user_id";
+					$result_comment=$database->query($query_comment);
+					$output_comment=[];
+					for($i=0;$i<$result_comment->num_rows;$i++){
+						$output_comment_each=$result_comment->fetch_assoc();
+						array_push($output_comment,$output_comment_each);
+					}
+					$output_comment_final=[];
+					for($i=0;$i<count($output_comment);$i++){
+						$output_each=$output_comment[$i];
+						$v='
+	                    <section class="section-commentUnit flex flex-row">
+	                        <img src="uploads/images/'.$output_each['avatar'].'">
+	                        <div class="section-comment-content flex flex-column">
+	                            <div class="flex flex-row flex_center_align_horizontal">
+	                                <a href="user-profile.html?userid='.$output_each['user_id'].'">'.$output_each['user_name'].'</a>
+	                                <p class="date"> Posted on '.$output_each['upload_time'].'</p>
+	                            </div>
+	                            <p>'.$output_each['content'].'</p>  
+	                        </div>                      
+	                    </section>
+	                    ';
+	                    array_push($output_comment_final,$v);
+					}
+
+
+					$v1=generatePostDetail($output_main);
+					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final];
+					echo json_encode($arr);
+				}			
 		}
 
 	}//END if(isset($_GET['request']))//////////////////
