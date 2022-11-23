@@ -10,8 +10,34 @@
 
 		switch($_GET['query']){
 			case 'loadIndex':
-				// $query1="SELECT post_id from posts ORDER BY upload_time DESC LIMIT 12";
-				$query1="SELECT post_id from posts ORDER BY upload_time DESC";
+				//prepare query: pull post_id that are needed from database based on filter requirements
+				if(isset($_GET['filter'])){
+					$query1='SELECT post_id from posts';
+					$filter='';
+					switch($_GET['filter']){
+						case 'images':
+							$filter=' WHERE category=1';
+							break;
+						case 'articles':
+							$filter=' WHERE category=2';
+							break;
+					}
+					$query1.=$filter;
+					$query1.=" ORDER BY upload_time DESC";
+				}
+				
+				elseif(isset($_GET['tag'])){
+					// SELECT posts.post_id, tags.tag_name from posts, tags WHERE tags.tag_name='Digital 2D' AND tags.post_id=posts.post_id
+					$query1="SELECT posts.post_id FROM posts, tags WHERE tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
+				}
+
+				//prepare query: pull all if no filter is set
+				else{
+					// $query1="SELECT post_id from posts ORDER BY upload_time DESC LIMIT 12";
+					$query1="SELECT post_id from posts ORDER BY upload_time DESC";
+				}
+
+				//use the query prepared above to pull the list of post_id, and put in an array for future use
 				$result1=$database->query($query1);
 				$output1_arr=[];
 				for($i=0;$i<$result1->num_rows;$i++){
@@ -19,18 +45,24 @@
 					array_push($output1_arr,$output_each[0]);
 				}
 
-				$output_arr_final=[];
-				for($i=0;$i<count($output1_arr);$i++){
-					$id=$output1_arr[$i];
-					$query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
-					$result2=$database->query($query2);
-					$output2=$result2->fetch_assoc();
-					array_push($output_arr_final,$output2);
-				}
+				if(count($output1_arr)==0){
 
-				//categolary 1 is image, 2 is pure text
-				//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.
-				echo json_encode(generatePosts($output_arr_final));
+				}
+				else{
+					//pull the actual post content based on post_id
+					$output_arr_final=[];
+					for($i=0;$i<count($output1_arr);$i++){
+						$id=$output1_arr[$i];
+						$query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
+						$result2=$database->query($query2);
+						$output2=$result2->fetch_assoc();
+						array_push($output_arr_final,$output2);
+					}
+
+					//categolary 1 is image, 2 is pure text
+					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.
+					echo json_encode(generatePosts($output_arr_final));
+				}
 				break;
 
 
@@ -38,7 +70,10 @@
 				if(isset($_GET['uid'])){
 					$uid=$_GET['uid'];
 					//querying user bio
+
 					$query1="SELECT users.user_id,users.user_name,users.avatar,users.album_cover,users.description, COUNT(following.followed_user_id) AS followers FROM users, following WHERE users.user_id=".$uid." AND users.user_id=following.followed_user_id";
+
+					
 					$result1=$database->query($query1);
 					$output1=$result1->fetch_assoc();
 					// this is the html layout for user bio

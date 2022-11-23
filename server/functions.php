@@ -112,7 +112,7 @@ function checkWatchlist($db, $product_code, $session){
             </section>
             <p>'.$output1['description'].'</p>
             <br><img src="uploads/images/'.$output1['avatar'].'">
-            <label class="username"><a href="user-profile.html?uid='.$output1['user_id'].'">'.$output1['user_name'].'</a></label>
+            <label class="username"><a href="user-profile.html?userid='.$output1['user_id'].'">'.$output1['user_name'].'</a></label>
             <label class="userid"> @'.$output1['user_id'].'</label>
             <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
             </section>
