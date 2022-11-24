@@ -56,7 +56,9 @@ figure img, img{
 .hidden{
     display: none;
 }
-
+.search button{
+    margin: 0 0 0 0.5rem !important;
+}
 
 .section-userWorkDisplay{
     columns: 4;

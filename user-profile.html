@@ -42,13 +42,14 @@
                     <a class="select-collect">Username's Collection</a>
                 </section>
                 <section class="sub-button">
-                    <button href="" class ="selected" type="button"><strong>All</strong></button>
-                    <button href="" class ="unselected" type="button"><strong>Images</strong></button>
-                    <button href="" class ="unselected" type="button"><strong>Articles</strong></button>
+                    <button class="selected" id="button-index-All" type="button"><strong>All</strong></button>
+                    <button class="unselected" id="button-index-Images" type="button"><strong>Images</strong></button>
+                    <button class="unselected" id="button-index-Articles" type="button"><strong>Articles</strong></button>
                 </section>
-                <section class="search">
+                <section class="flex flex-row flex_center_align_horizontal search">
                     <label>Filter By:</label>
-                    <input type="search-bar" placeholder="Enter Keyword: Tag/User ID">
+                    <input id="input-filter" type="search-bar" placeholder="Search tags">
+                    <button class="selected" id="button-index-FilterBy" type="button"><strong>Go</strong></button>
                 </section>
             </section>
             <section class="all">
