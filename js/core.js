@@ -16,10 +16,12 @@ function pullIndexContent(){
 	});	
 }
 
-function pullUserProfile(uid){
+function pullUserProfile(uid,type){
+	console.log('run');
+	console.log(type);
 	$.ajax({
 		type:'POST',
-		url:'server/base.php?query=loadUser&uid='+uid,
+		url:'server/base.php?query=loadUser&uid='+uid+'&type='+type,
 		data:{},
 		dataType:'text',
 		success:function(data){

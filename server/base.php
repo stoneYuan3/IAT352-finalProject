@@ -66,12 +66,14 @@
 
 			case 'loadUser':
 				if(isset($_GET['uid'])){
+
+					//load user bio: step 1 pulling user bio data from database
 					$uid=$_GET['uid'];
 					$query1="SELECT users.user_id,users.user_name,users.avatar,users.album_cover,users.description, COUNT(following.followed_user_id) AS followers FROM users, following WHERE users.user_id=".$uid." AND users.user_id=following.followed_user_id";
 
 					$result1=$database->query($query1);
 					$output1=$result1->fetch_assoc();
-					// this is the html layout for user bio
+					//load user bio: step 2 assign data to html layout, store in a variable for future use
 					$v1= '
 		                <section class="banner">
 		                    <!-- img or grey background-->
@@ -96,30 +98,39 @@
 		                </section>
 					';
 
-					//querying posts posted by this user
-					// $query1="SELECT post_id FROM posts WHERE posts.user_id=".$uid." ORDER BY upload_time DESC LIMIT 12";
-					$query1="SELECT post_id FROM posts WHERE user_id=".$uid;
-					////
-					if(isset($_GET['filter'])){
-						$filter='';
-						switch($_GET['filter']){
-							case 'images':
-								$filter=' AND category=1';
-								break;
-							case 'articles':
-								$filter=' AND category=2';
-								break;
+					//load posts (user's posts or user's collections)
+					//step 1:get the post id of posts that need to be displayed
+					if(isset($_GET['type'])){
+						$type=$_GET['type'];
+						if($type=='posts'){
+							$query1="SELECT post_id FROM posts WHERE user_id=".$uid;
 						}
-						$query1.=$filter;
-						$query1.=" ORDER BY upload_time DESC";
-					}
-					elseif(isset($_GET['tag'])){
-						// SELECT posts.post_id, tags.tag_name from posts, tags WHERE tags.tag_name='Digital 2D' AND tags.post_id=posts.post_id
-						$query1="SELECT posts.post_id FROM posts, tags WHERE posts.user_id=".$uid." AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
-						$query1.=" ORDER BY upload_time DESC";
-					}					
-					else{
-						$query1.=" ORDER BY upload_time DESC";
+						elseif($type=='collection'){
+							// $query1="SELECT post_id FROM collection WHERE user_id=".$uid;
+							$query1="SELECT posts.post_id FROM posts, collection WHERE posts.post_id=collection.post_id AND collection.user_id=".$uid;
+						}
+						////
+						if(isset($_GET['filter'])){
+							$filter='';
+							switch($_GET['filter']){
+								case 'images':
+									$filter=' AND category=1';
+									break;
+								case 'articles':
+									$filter=' AND category=2';
+									break;
+							}
+							$query1.=$filter;
+							$query1.=" ORDER BY upload_time DESC";
+						}
+						elseif(isset($_GET['tag'])){
+							// SELECT posts.post_id, tags.tag_name from posts, tags WHERE tags.tag_name='Digital 2D' AND tags.post_id=posts.post_id
+							$query1="SELECT posts.post_id FROM posts, tags WHERE posts.user_id=".$uid." AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
+							$query1.=" ORDER BY upload_time DESC";
+						}					
+						else{
+							$query1.=" ORDER BY upload_time DESC";
+						}
 					}
 					////					
 					$result1=$database->query($query1);
