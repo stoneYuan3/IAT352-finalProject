@@ -3,7 +3,6 @@
 <?php
 	require_once('functions.php');
 	$database=db_connect($dbhost,$dbuser,$dbpass,$dbname);
-
 	session_start();
 
 	if(isset($_GET['query'])){
@@ -138,7 +137,8 @@
 							$output2=$result2->fetch_assoc();
 							array_push($output_arr_final,$output2);						
 					}
-					$v2=generatePosts($output_arr_final);
+
+					$v2=generatePosts($output_arr_final);				
 					$arr=['bio' => $v1,'userpost' => $v2];
 					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.	
 					//In this case the array $arr containing two modules (user bio and user posts), which are raw HTML codes stored in array. It is tranfered back to the front end. The front end can now insert those two modules into different parts of the page, which cannot be done if php simply transfer pure html.			
