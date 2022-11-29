@@ -75,6 +75,23 @@ figure img, img{
 .search button{
     margin: 0 0 0 0.5rem !important;
 }
+
+.button-nav-profile{
+    margin-right: 1rem;
+}
+.button-nav-profile img{
+    max-width: 3rem;
+}
+.button-nav-newPost{
+    padding:0.5rem;
+    background-color: white;
+    border-radius: 1rem;
+    font-weight: bold;
+}
+.nav-userProfile{
+    align-items: center;
+}
+
 .section-userWorkDisplay{
     columns: 4;
     column-gap: 1rem;
@@ -219,6 +236,8 @@ figure img, img{
     list-style-type: none;
     margin: 0;
     padding: 1rem 5rem;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbar a {

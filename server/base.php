@@ -83,7 +83,7 @@
 		                <section class="bio flex flex-row">
 		                	<div class="flex flex-column">
 			                    <img src="uploads/images/'.$output1['avatar'].'">
-			                    <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+			                    <button id="button-index-Following" class="selected" type="follow" value="follow"><strong>Follow</strong></button>
 		                    </div>
 
 		                   	<div class="flex flex-column section-userInfo-text">

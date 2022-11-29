@@ -1,4 +1,65 @@
+function checkLogin(){
+	var request=$.ajax({
+		type:'POST',
+		url:'server/checkLogin.php?query=checkLogin',
+		data:{},
+		dataType:'text'
+	});
 
+	request.done(function(data){
+		console.log(data);
+		console.log($('#button-index-Following').length>0);
+		if(data=='not_loggedIn'){
+			$('.nav-userProfile').addClass('hidden');
+			$('.nav-login').removeClass('hidden');
+			if($('#button-index-Following').length>0){
+				$('#button-index-Following').addClass('hidden');
+			}
+		}
+		else{
+			$('.nav-userProfile').removeClass('hidden');
+			$('.nav-login').addClass('hidden');	
+			if($('#button-index-Following').length>0){
+				$('#button-index-Following').removeClass('hidden');
+			}							
+		}		
+	});
+    request.fail(function(msg){
+        console.log("error", msg);
+    });	
+	// return request;
+}
+
+// function checkLogin_nav(request){
+// 	request.done(function(data){
+// 		console.log(data);
+// 		if(data=='not_loggedIn'){
+// 			$('.nav-userProfile').addClass('hidden');
+// 			$('.nav-login').removeClass('hidden');
+// 		}
+// 		else{
+// 			$('.nav-userProfile').removeClass('hidden');
+// 			$('.nav-login').addClass('hidden');					
+// 		}		
+// 	});
+//     request.fail(function(msg){
+//         console.log("error", msg);
+//     });	
+// }
+// function checkLogin_index(request){
+// 	request.done(function(data){
+// 		console.log(data);
+// 		if(data=='not_loggedIn'){
+// 			$('#button-index-Following').addClass('hidden');
+// 		}
+// 		else{
+// 			$('#button-index-Following').removeClass('hidden');				
+// 		}		
+// 	});
+//     request.fail(function(msg){
+//         console.log("load index error ", msg);
+//     });	
+// }
 
 function pullIndexContent(){
 	$.ajax({
@@ -53,3 +114,7 @@ function pullPostDetail(post){
 		}
 	});	
 }
+
+$('document').ready(function(){
+	checkLogin();
+})
