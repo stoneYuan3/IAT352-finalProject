@@ -102,14 +102,24 @@
 					//step 1:get the post id of posts that need to be displayed
 					if(isset($_GET['type'])){
 						$type=$_GET['type'];
+
+						$query_select="";
+						$query_from="";
+						$query_where="";
 						if($type=='posts'){
-							$query1="SELECT post_id FROM posts WHERE user_id=".$uid;
+							$query_select="posts.post_id";
+							$query_from="posts";
+							$query_where="posts.user_id=".$uid;
 						}
 						elseif($type=='collection'){
-							// $query1="SELECT post_id FROM collection WHERE user_id=".$uid;
-							$query1="SELECT posts.post_id FROM posts, collection WHERE posts.post_id=collection.post_id AND collection.user_id=".$uid;
+							$query_select="posts.post_id";
+							$query_from="posts,collection";
+							$query_where="posts.post_id=collection.post_id AND collection.user_id=".$uid;		
 						}
-						////
+						if(isset($_GET['tag'])){
+							$query_from.=",tags";
+							$query_where.=" AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
+						}
 						if(isset($_GET['filter'])){
 							$filter='';
 							switch($_GET['filter']){
@@ -120,17 +130,10 @@
 									$filter=' AND category=2';
 									break;
 							}
-							$query1.=$filter;
-							$query1.=" ORDER BY upload_time DESC";
+							$query_where.=$filter;
 						}
-						elseif(isset($_GET['tag'])){
-							// SELECT posts.post_id, tags.tag_name from posts, tags WHERE tags.tag_name='Digital 2D' AND tags.post_id=posts.post_id
-							$query1="SELECT posts.post_id FROM posts, tags WHERE posts.user_id=".$uid." AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
-							$query1.=" ORDER BY upload_time DESC";
-						}					
-						else{
-							$query1.=" ORDER BY upload_time DESC";
-						}
+						$query_where.=" ORDER BY upload_time DESC";
+						$query1="SELECT ".$query_select." FROM ".$query_from." WHERE ".$query_where;
 					}
 					////					
 					$result1=$database->query($query1);
