@@ -5,9 +5,11 @@
 	$database=db_connect($dbhost,$dbuser,$dbpass,$dbname);
 	session_start();
 
+	//activate when a request is received from javascript
 	if(isset($_GET['query'])){
-
+		//do accordingly based on the type of request
 		switch($_GET['query']){
+			//for index.html, pulling posts for index page once the page starts, and act accordingly based on user filter
 			case 'loadIndex':
 				//prepare query: pull post_id that are needed from database based on filter requirements
 				if(isset($_GET['filter'])){
@@ -26,13 +28,11 @@
 				}
 				
 				elseif(isset($_GET['tag'])){
-					// SELECT posts.post_id, tags.tag_name from posts, tags WHERE tags.tag_name='Digital 2D' AND tags.post_id=posts.post_id
 					$query1="SELECT posts.post_id FROM posts, tags WHERE tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
 				}
 
 				//prepare query: pull all if no filter is set
 				else{
-					// $query1="SELECT post_id from posts ORDER BY upload_time DESC LIMIT 12";
 					$query1="SELECT post_id from posts ORDER BY upload_time DESC";
 				}
 
@@ -45,7 +45,7 @@
 				}
 
 				if(count($output1_arr)==0){
-
+					//TBD, place a placeholder text saying that nothing matches with your query
 				}
 				else{
 					//pull the actual post content based on post_id
@@ -64,6 +64,7 @@
 				}
 				break;
 
+			//for user-profile.html
 			case 'loadUser':
 				if(isset($_GET['uid'])){
 
@@ -99,13 +100,13 @@
 					';
 
 					//load posts (user's posts or user's collections)
-					//step 1:get the post id of posts that need to be displayed
+					//step 1:design a query that will get the post id of posts that need to be displayed
 					if(isset($_GET['type'])){
 						$type=$_GET['type'];
-
 						$query_select="";
 						$query_from="";
 						$query_where="";
+						//specifiy the base for sql query based on whether user want to view this member's post or this member's collection
 						if($type=='posts'){
 							$query_select="posts.post_id";
 							$query_from="posts";
@@ -116,10 +117,12 @@
 							$query_from="posts,collection";
 							$query_where="posts.post_id=collection.post_id AND collection.user_id=".$uid;		
 						}
+						//if user is filtering by tag, add corresponding commands to the query
 						if(isset($_GET['tag'])){
 							$query_from.=",tags";
 							$query_where.=" AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
 						}
+						//if user is filtering by image/article type, add corresponding commands to the query
 						if(isset($_GET['filter'])){
 							$filter='';
 							switch($_GET['filter']){
@@ -132,34 +135,39 @@
 							}
 							$query_where.=$filter;
 						}
+						//specifiy that result should be ordered by upload time and finish the query by putting all components together
 						$query_where.=" ORDER BY upload_time DESC";
 						$query1="SELECT ".$query_select." FROM ".$query_from." WHERE ".$query_where;
 					}
-					////					
+
+					//load posts step 2: pull post information needed for the final layout based on the list of post_id, and return an array of information		
 					$result1=$database->query($query1);
 					$output1_arr=[];
 					for($i=0;$i<$result1->num_rows;$i++){
 						$output_each=$result1->fetch_row();
 						array_push($output1_arr,$output_each[0]);
 					}
-					// print_r($output1_arr);
+
 					$output_arr_final=[];
 					for($i=0;$i<count($output1_arr);$i++){
 						$id=$output1_arr[$i];
 						$query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
 							$result2=$database->query($query2);
 							$output2=$result2->fetch_assoc();
-							array_push($output_arr_final,$output2);						
+							array_push($output_arr_final,$output2);	
 					}
 
+					//load posts step 3: render the information got from step 2 to html layout with generatePosts(). check functions.php
 					$v2=generatePosts($output_arr_final);				
 					$arr=['bio' => $v1,'userpost' => $v2];
+
 					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.	
 					//In this case the array $arr containing two modules (user bio and user posts), which are raw HTML codes stored in array. It is tranfered back to the front end. The front end can now insert those two modules into different parts of the page, which cannot be done if php simply transfer pure html.			
 					echo json_encode($arr);
 				}
 				break;
 
+			//for detai.html
 			case 'loadPostDetail':
 				if(isset($_GET['post'])){
 					$post_id=$_GET['post'];
@@ -209,19 +217,15 @@
 	                    ';
 	                    array_push($output_comment_final,$v);
 					}
-
-
 					$v1=generatePostDetail($output_main);
 					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final];
 					echo json_encode($arr);
-				}			
+				}		
+				break;	
 		}
 
 	}//END if(isset($_GET['request']))//////////////////
 
 
-// SELECT posts.category,users.avatar,users.user_name,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id=1 AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id
-
-// SELECT posts.category,users.avatar,users.user_name,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id=1 AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id
 ?>
 
