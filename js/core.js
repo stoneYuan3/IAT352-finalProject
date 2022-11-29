@@ -9,19 +9,35 @@ function checkLogin(){
 	request.done(function(data){
 		console.log(data);
 		console.log($('#button-index-Following').length>0);
+		var hasFollowFeature;
+		var hasCommentFeature;
+		if($('#button-index-Following').length>0){
+			hasFollowFeature=true;
+		}
+		if($('#section-comment-send').length>0){
+			hasCommentFeature=true;
+		}
 		if(data=='not_loggedIn'){
 			$('.nav-userProfile').addClass('hidden');
 			$('.nav-login').removeClass('hidden');
-			if($('#button-index-Following').length>0){
+			if(hasFollowFeature){
 				$('#button-index-Following').addClass('hidden');
 			}
+			if(hasCommentFeature){
+				$('#section-comment-send').addClass('hidden');
+			}			
 		}
 		else{
 			$('.nav-userProfile').removeClass('hidden');
 			$('.nav-login').addClass('hidden');	
-			if($('#button-index-Following').length>0){
+			if(hasFollowFeature){
 				$('#button-index-Following').removeClass('hidden');
-			}							
+				//TBD, do something when user uses
+			}	
+			if(hasCommentFeature){
+				$('#section-comment-send').removeClass('hidden');
+				//TBD, do something when user uses
+			}										
 		}		
 	});
     request.fail(function(msg){
@@ -68,6 +84,7 @@ function pullIndexContent(){
 		data:{},
 		dataType:'text',
 		success:function(data){
+			checkLogin();
 			var result=JSON.parse(data);		
 			$('.section-userWorkDisplay').html(result);
 		},
@@ -86,6 +103,7 @@ function pullUserProfile(uid,type){
 		data:{},
 		dataType:'text',
 		success:function(data){
+			checkLogin();
 			//receive json from php, parse it, insert into different html sections
 			var result=JSON.parse(data);
 			$('.user-basicInfo').html(result.bio);
@@ -103,6 +121,7 @@ function pullPostDetail(post){
 		data:{},
 		dataType:'text',
 		success:function(data){
+			checkLogin();
 			//receive json from php, parse it, insert into different html sections
 			var result=JSON.parse(data);
 			$('.section-detail-mainContent').html(result.main);

@@ -6,15 +6,18 @@
 
     <body>
         <!-- resource: https://www.w3schools.com/howto/howto_js_topnav.asp -->
-        <section class="navbar">
+        <section class="navbar flex flex-row">
             <a class="logo" href="index.html"><img src="img/logo.png"></a>
 
             <!-- if didn't sign in -->
-            <a class="active" href="login.html" ><b>Login/Signup</b></a>
-
+            <div class="nav-login">
+                <a class="active link-nav-login" href="login.html" ><b>Login/Signup</b></a>
+            </div>
             <!-- if sign in -->
-            <!-- <a class="active"href="profile.html"><img src="img/icon.png"></a> -->
-            <!-- <a class="active" href="upload-image.html"><img src="img/new_post.png"></a> -->
+            <div class="flex flex-row nav-userProfile">
+                <a class="active button-nav-profile" href="profile.html?userid=1"><img src="img/icon.png"></a>
+                <a class="active button-nav-newPost" href="upload-image.html"><p>+ New Post</p></a>
+            </div>
         </section>
 
         <section class="detail">
@@ -41,13 +44,14 @@
             <hr>
             <section class="user-comments">
                 <p class="comment-title"><strong>Comments</strong></p>
-                <section class="my-comment flex flex-row flex_center_align_horizontal">
+
+                <section id="section-comment-send" class="my-comment flex flex-row flex_center_align_horizontal">
                     <img src="img/icon.png">
                     <input type="comments" placeholder="">
                     <button class ="selected" type="send" value="send"><strong>Send</strong></button>
                 </section><br><br>
-                <section class="all-comment">
 
+                <section class="all-comment">
                     <section class="section-commentUnit flex flex-row">
                         <img src="img/icon.png">
                         <div class="section-comment-content flex flex-column">

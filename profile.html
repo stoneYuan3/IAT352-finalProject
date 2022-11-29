@@ -6,15 +6,18 @@
 
     <body>
         <!-- resource: https://www.w3schools.com/howto/howto_js_topnav.asp -->
-        <section class="navbar">
+        <section class="navbar flex flex-row">
             <a class="logo" href="index.html"><img src="img/logo.png"></a>
 
             <!-- if didn't sign in -->
-            <a class="active" href="login.html" ><b>Login/Signup</b></a>
-
+            <div class="nav-login">
+                <a class="active link-nav-login" href="login.html" ><b>Login/Signup</b></a>
+            </div>
             <!-- if sign in -->
-            <!-- <a class="active"href="profile.html"><img src="img/icon.png"></a> -->
-            <!-- <a class="active" href="upload-image.html"><img src="img/new_post.png"></a> -->
+            <div class="flex flex-row nav-userProfile">
+                <a class="active button-nav-profile" href="profile.html?userid=1"><img src="img/icon.png"></a>
+                <a class="active button-nav-newPost" href="upload-image.html"><p>+ New Post</p></a>
+            </div>
         </section>
 
         <section class="profile">

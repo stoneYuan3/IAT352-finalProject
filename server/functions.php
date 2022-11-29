@@ -114,7 +114,7 @@ function checkWatchlist($db, $product_code, $session){
             <br><img src="uploads/images/'.$output1['avatar'].'">
             <label class="username"><a href="user-profile.html?userid='.$output1['user_id'].'">'.$output1['user_name'].'</a></label>
             <label class="userid"> @'.$output1['user_id'].'</label>
-            <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+            <button id="button-index-Following" class="selected" type="follow" value="follow"><strong>Follow</strong></button>
             </section>
             </section>                      
             ';          
@@ -136,7 +136,7 @@ function checkWatchlist($db, $product_code, $session){
             <br><img src="uploads/images/'.$output1['avatar'].'">
             <label class="username"><a href="user-profile.html?userid='.$output1['user_id'].'">'.$output1['user_name'].'</a></label>
             <label class="userid"> @'.$output1['user_id'].'</label>
-            <button class ="selected" type="follow" value="follow"><strong>Follow</strong></button>
+            <button id="button-index-Following" class="selected" type="follow" value="follow"><strong>Follow</strong></button>
             </section>
             </section>                      
             ';             
