@@ -9,8 +9,8 @@ function checkLogin(){
 	request.done(function(data){
 		console.log(data);
 		console.log($('#button-index-Following').length>0);
-		var hasFollowFeature;
-		var hasCommentFeature;
+		var hasFollowFeature=false;
+		var hasCommentFeature=false;
 		if($('#button-index-Following').length>0){
 			hasFollowFeature=true;
 		}

@@ -72,6 +72,11 @@ figure img, img{
 .style-selected-underline{
     text-decoration: underline solid #FFDA57 5px;
 }
+.style-warning{
+    color: red;
+    font-size: 1rem;
+}
+
 .search button{
     margin: 0 0 0 0.5rem !important;
 }
@@ -223,6 +228,13 @@ figure img, img{
 .user-desc{
     margin-bottom: 0.5rem;
 }
+.signup-area input{
+    margin-bottom: 1rem;
+}
+.signup-area button{
+    margin-bottom: 1.5rem;
+}
+
 /*/////////////////////////////////////////////////////////*/
 
 
@@ -265,12 +277,15 @@ a.active:hover {
 
 /* log in, sign up */
 .login, .signup{
-    margin:auto;
-    margin-top:10em;
-    width: 50%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
-
+.login form, .signup form{
+    margin:8rem 10rem;
+    width: 30%;
+}
 /* reference: https://www.w3schools.com/cssref/css3_pr_box-shadow.php */
 .login-area, .signup-area{
     padding: 2em;
@@ -300,7 +315,7 @@ h1{
 }
 
 .login button, .signup button{
-    margin-top: 2em;   
+    margin-top: 0.5rem;   
 }
 
 .selected {

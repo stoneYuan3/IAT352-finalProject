@@ -1,6 +1,6 @@
 $('document').ready(function(){
 	pullIndexContent();
-
+	
 	$('#button-index-FilterBy').click(function(){
 		var keyword=$('#input-filter').val();
 		$.ajax({

@@ -3,7 +3,7 @@
 <?php
 	require_once('functions.php');
 	$database=db_connect($dbhost,$dbuser,$dbpass,$dbname);
-	session_start();
+	// session_start();
 
 	//activate when a request is received from javascript
 	if(isset($_GET['query'])){

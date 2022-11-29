@@ -1,14 +1,10 @@
-
-
 <?php
+//database connection///////////////////////////////////////////////////////////
 	$dbhost='localhost';
     $dbuser="root";
     $dbpass="";
-    // $dbname="geodatatest";
     $dbname="garage";	
-?>
 
-<?php
     function db_connect($dbhost,$dbuser,$dbpass,$dbname){
         $connect=mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
         return $connect;
@@ -18,24 +14,16 @@
             mysqli_close($connection);
         }
     }
-?>
 
-<?php
-//check if an item exists in a watchlist
-function checkWatchlist($db, $product_code, $session){
-    $noDuplicate=false;
-    $query_checkWatchlist = "SELECT userid, productCode FROM watchlist WHERE userid='".$session."' AND productCode='".$product_code."'";
-    $result_checkWatchlist=$db->query($query_checkWatchlist);
-    if($result_checkWatchlist->num_rows==0){
-        $noDuplicate=true;
-    }    
-    return $noDuplicate;
-}
+    //Function to sanitize inputs before sql inserts - by Kai-Lee MacBain, adapted from code from Lecture 8
+    function sanitizeInputForSql($dbConnection,$var) {
+        $var = mysqli_real_escape_string($dbConnection, $var);
+        $var = htmlentities($var);
+        $var = strip_tags($var);
+        return $var;
+    }
 
-?>
-
-<?php
-
+//post generation////////////////////////////////////////////////////////////////
     function generatePosts($array){
         $output_arr_final=$array;
         $final_result=[];
@@ -145,30 +133,7 @@ function checkWatchlist($db, $product_code, $session){
         return $v1;     
     }
 
-?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php
     function page_cssLink($css_name){
         $cssLink = "<link rel = \"stylesheet\" href = \"". $css_name . "\">";
         echo $cssLink;
@@ -191,15 +156,17 @@ function checkWatchlist($db, $product_code, $session){
     }    
     ////////////////////
 
-    function create_header(){
-        session_start();
-        echo'
-            <html lang="en">
-              <head>
-                <title>IAT352-A3</title>
-              </head>
-        ';
-    }
+
+//old codes from other projects, may become useful reference////////////////////////////////////////////
+    // function create_header(){
+    //     session_start();
+    //     echo'
+    //         <html lang="en">
+    //           <head>
+    //             <title>IAT352-A3</title>
+    //           </head>
+    //     ';
+    // }
 
     function create_nav(){
 
@@ -242,4 +209,15 @@ function checkWatchlist($db, $product_code, $session){
         ';
         addHTTPS();       
     }
+//check if an item exists in a watchlist
+function checkWatchlist($db, $product_code, $session){
+    $noDuplicate=false;
+    $query_checkWatchlist = "SELECT userid, productCode FROM watchlist WHERE userid='".$session."' AND productCode='".$product_code."'";
+    $result_checkWatchlist=$db->query($query_checkWatchlist);
+    if($result_checkWatchlist->num_rows==0){
+        $noDuplicate=true;
+    }    
+    return $noDuplicate;
+}
+
 ?>

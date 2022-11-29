@@ -20,21 +20,32 @@
             </div>
         </section>
 
-        <section class="signup">
-            <form class="signup-area" action="index.html">
+        <section class="signup flex flex-column">
+            <form class="signup-area flex flex-column" method="post">
                 <h1>Sign Up</h1>
                 <hr>
-                <h3>User Name</h3>
-                <input type="username" placeholder="">
-                <h3>Email</h3>
-                <input type="email" placeholder="">
-                <h3>Password</h3>
-                <input type="password" placeholder="">
-                <button class ="selected" type="submit" value="submit"><strong>Go</strong></button>
+
+                <h3><label for="user_name">User Name</label></h3>
+                <input class="normal-input" id="user_name" name="user_name" type="text" value="">
+
+                <h3><label for="email">Email Address</label></h3>
+                <input class="normal-input" id="email" type="email" name="email" value="">
+
+                <h3><label for="password">Password</label></h3>
+                <input class="normal-input" id="password" type="password" name="password" value="">
+
+                <h3><label for="password2">Confirm Password</label></h3>
+                <input class="normal-input" id="password2" type="password" name="password2" value="">
+
+                <button class="selected submit-button" name="submit" value="Register">Register</button>
+                <a class="middle" href="login.html"><b>Have an account? Log In</b></a>
             </form>
-            <a class="middle" href="login.html"><b>Have an account? Log In</b></a>
+            
         </section>
 
+        <script src="js/jquery-3.6.1.js"></script>
+        <script src="js/core.js"></script>
+        <script src="js/login_signup.js"></script>
 
     </body>
 </html>
