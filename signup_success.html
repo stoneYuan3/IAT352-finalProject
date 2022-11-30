@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Header</title>
+        <link rel="stylesheet" href="css/css.css">
+    </head>
+
+    <body>
+        <!-- resource: https://www.w3schools.com/howto/howto_js_topnav.asp -->
+        <section class="navbar flex flex-row">
+            <a class="logo" href="index.html"><img src="img/logo.png"></a>
+
+            <!-- if didn't sign in -->
+            <div class="nav-login">
+                <a class="active link-nav-login" href="login.html" ><b>Login/Signup</b></a>
+            </div>
+            <!-- if sign in -->
+            <div class="flex flex-row nav-userProfile">
+                <a class="active button-nav-profile" href="profile.html?userid=1"><img src="img/icon.png"></a>
+                <a class="active button-nav-newPost" href="upload-image.html"><p>+ New Post</p></a>
+            </div>
+        </section>
+
+        <section class="signup flex flex-column">
+            <div class="signup-area success-info flex flex-column">
+                <h1>Sign Up Success!</h1>
+                <div class="flex flex-row">
+                    <a href="index.html">Back to home page</a>
+                    <a href="login.html">Log in</a>
+                </div>
+            </div>
+            
+        </section>
+
+        <script src="js/jquery-3.6.1.js"></script>
+        <script src="js/core.js"></script>
+        <script src="js/login_signup.js"></script>
+
+    </body>
+</html>

@@ -228,13 +228,15 @@ figure img, img{
 .user-desc{
     margin-bottom: 0.5rem;
 }
-.signup-area input{
+.login-area input, .signup-area input{
     margin-bottom: 1rem;
 }
-.signup-area button{
+.login-area button, .signup-area button{
     margin-bottom: 1.5rem;
 }
-
+#logout{
+    background:none;
+}
 /*/////////////////////////////////////////////////////////*/
 
 
@@ -282,9 +284,15 @@ a.active:hover {
     align-items: center;
     text-align: center;
 }
-.login form, .signup form{
+.login form, .signup form, .signup .success-info{
     margin:8rem 10rem;
     width: 30%;
+}
+.success-info{
+    align-items: center;
+}
+.success-info a{
+    margin-right: 2rem;
 }
 /* reference: https://www.w3schools.com/cssref/css3_pr_box-shadow.php */
 .login-area, .signup-area{

@@ -30,6 +30,10 @@ function checkLogin(){
 		else{
 			$('.nav-userProfile').removeClass('hidden');
 			$('.nav-login').addClass('hidden');	
+			if($('#logout').length==0){
+				$('<button id="logout">Log out</button>').insertAfter('.button-nav-newPost');
+			}
+			$('.button-nav-profile').attr('href','user-profile.html?userid='+data);
 			if(hasFollowFeature){
 				$('#button-index-Following').removeClass('hidden');
 				//TBD, do something when user uses
@@ -37,7 +41,20 @@ function checkLogin(){
 			if(hasCommentFeature){
 				$('#section-comment-send').removeClass('hidden');
 				//TBD, do something when user uses
-			}										
+			}			
+			$('#logout').click(function(){
+				$.ajax({
+					type:'POST',
+					url:'server/checkLogin.php?query=logout',
+					data:{},
+					success:function(data){
+						window.location.replace("index.html");
+					},
+					error:function(data){
+						console.log("an error happened, logout failed");
+					}
+				});
+			})							
 		}		
 	});
     request.fail(function(msg){

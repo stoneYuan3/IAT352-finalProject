@@ -20,19 +20,29 @@
             </div>
         </section>
 
-        <section class="login">
-            <form class="login-area" action="index.html">
+        <section class="login flex flex-column">
+            <form class="login-area flex flex-column" method="POST">
+
                 <h1>Login</h1>
                 <hr>
-                <h3>Email</h3>
-                <input type="email" placeholder="">
-                <h3>Password</h3>
-                <input type="password" placeholder="">
-                <button class ="selected" type="submit" value="submit"><strong>Go</strong></button>
+
+                <h3><label for="email">Email Address</label></h3>
+                <input class="normal-input" id="email" type="email" name="email" value="">
+
+                <h3><label for="password">Password</label></h3>
+                <input class="normal-input" id="password" type="password" name="password" value="">
+
+                <button class ="submit-button selected" type="submit" value="submit"><strong>Go</strong></button>
+                <a class="middle" href="signup.html"><b>Don't have an account yet? Sign up here</b></a>
             </form>
-            <a class="middle" href="signup.html"><b>Don't have an account yet? Sign up here</b></a>
+            
         </section>
 
 
     </body>
+
+    <script src="js/jquery-3.6.1.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/login_signup.js"></script>
+
 </html>
