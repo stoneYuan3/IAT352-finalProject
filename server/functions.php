@@ -83,20 +83,22 @@
     }
 
 
-    function generatePostDetail($array){
-        $output1=$array;
+    function generatePostDetail($array1,$array2,$array3){
+        $output1=$array1;
+        $output_arr_img=$array2;
+        $output_arr_comment=$array3;
         $v1='';
         if($output1['category']==1){
             $v1= '
             <section class="section-detail-mainContent">
             <section class="picture">
-            <img src="uploads/images/'.$output1['image_content'].'">
+            <img src="uploads/images/'.$output_arr_img['image_content'].'">
             </section>
             <section class="description">
             <img src="img/liked.png">
             <label>'.$output1['collec_num'].'</label>
             <img src="img/comment.png">
-            <label>'.$output1['comment_num'].'</label>
+            <label>'.$output_arr_comment['comment_num'].'</label>
             <label class="view">13452 views</label>
             <section class="tags">
             </section>
@@ -119,7 +121,7 @@
             <img src="img/liked.png">
             <label>'.$output1['collec_num'].'</label>
             <img src="img/comment.png">
-            <label>'.$output1['comment_num'].'</label>
+            <label>'.$output_arr_comment['comment_num'].'</label>
             <label class="view">13452 views</label>
             <section class="tags">
             </section>

@@ -201,9 +201,17 @@
 			case 'loadPostDetail':
 				if(isset($_GET['post'])){
 					$post_id=$_GET['post'];
-					$query_main="SELECT posts.post_id,posts.category,images.image_content,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) as comment_num,posts.description,users.user_id,users.user_name,users.avatar FROM posts,images,collection,users,comments WHERE posts.post_id=".$post_id." AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id AND posts.user_id=users.user_id";
+					$query_main="SELECT posts.post_id,posts.category,COUNT(collection.post_id) AS collec_num,posts.description,users.user_id,users.user_name,users.avatar FROM posts,collection,users WHERE posts.post_id=".$post_id." AND posts.post_id=collection.post_id AND posts.user_id=users.user_id";
 					$result_main=$database->query($query_main);
 					$output_main=$result_main->fetch_assoc();
+					
+					$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$post_id."' AND posts.post_id=images.post_id;";	
+					$result_img=$database->query($query_img);
+					$output_img=$result_img->fetch_assoc();
+
+					$query_commNum="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$post_id."' AND posts.post_id=comments.post_id;";	
+					$result_commNum=$database->query($query_commNum);
+					$output_commNum=$result_commNum->fetch_assoc();
 
 					$query_tag="SELECT posts.post_id,tags.tag_name FROM posts,tags WHERE posts.post_id=".$post_id." AND posts.post_id=tags.post_id";
 					$result_tag=$database->query($query_tag);
@@ -247,7 +255,7 @@
 	                    ';
 	                    array_push($output_comment_final,$v);
 					}
-					$v1=generatePostDetail($output_main);
+					$v1=generatePostDetail($output_main,$output_img,$output_commNum);
 					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final];
 					echo json_encode($arr);
 				}		
