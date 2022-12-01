@@ -19,30 +19,18 @@ $('document').ready(function(){
 		//var data=new FormData($(this)[0]);
 		var data=new FormData();
 		var image=$('#img').prop('files')[0];
-		data.append('img',image);
-		data.append('tags',$('#tags').val());
-		data.append('desc',$('#des').val());
-		//upload image with jquery and ajax:
-		//src: https://makitweb.com/how-to-upload-image-file-using-ajax-and-jquery/
-		// var image=$('#img')[0].files;
-		// var image=$('#img');
-		// data.push({'name':'image','value':image});
-		// data_img.append('image',image);
-		// console.log(data_img);
-		// data.push({'image',image[0]});
-		console.log(data);
-		// console.log(image);
-
-
 		var formComplete=true;
-		var imgUpload=$('#img')[0].files;
-		// if(imgUpload){
-		// 	formComplete=false;
-		// 	console.log('no image uploaded');
-		// 	$('<p class="style-warning">Please upload image</p>').insertBefore('.upload-image-box');
-		// }
+		// var imgUpload=$('#img')[0].files;
+		if(!image){
+			formComplete=false;
+			console.log('no image uploaded');
+			$('<p class="style-warning">Please upload image</p>').insertBefore('.upload-image-box');
+		}
 
 		if(formComplete){
+			data.append('img',image);
+			data.append('tags',$('#tags').val());
+			data.append('des',$('#des').val());			
 			var request=$.ajax({
 				type:'POST',
 				url:'server/upload.php?query=imgUpload&userid='+uid+'&category='+category,
@@ -52,7 +40,8 @@ $('document').ready(function(){
 			});
 			request.done(function(data){
 				//
-				console.log('post id is '+data);
+				// console.log('post id is '+data);
+				window.location.replace("index.html");
 			})
 		    request.fail(function(data){
 		        $('<p class="style-warning">Error, failed</p>').insertBefore('.bottom');
