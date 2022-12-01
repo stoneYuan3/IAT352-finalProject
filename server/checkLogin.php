@@ -16,6 +16,13 @@
 			}
 		}
 
+		// Codes in if($_GET['query']=='signUp'){} and if($_GET['query']=='login'){} on this page written by Kai-Lee MacBain
+		// Slightly adapted by Jack to fit the context
+
+		//from Kai-Lee
+		// All PHP code on this page written by Kai-Lee MacBain
+		// Adapted from Assignment 4 code from SFU IAT352: Internet Computing Technologies, taught by Mohammad Rjabi Seraji, Fall 2022
+		// HTML written by Winkie Ng and edited by Kai-Lee MacBain
 		if($_GET['query']=='signUp'){
 			// if($_POST['request_type']=='register'){
 			    $user_name = $_POST["user_name"];
