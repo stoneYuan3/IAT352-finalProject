@@ -24,12 +24,14 @@
     }
 
 //post generation////////////////////////////////////////////////////////////////
-    function generatePosts($array){
-        $output_arr_final=$array;
+    function generatePosts($array1,$array2,$array3){
+        $output_arr_main=$array1;
+        $output_arr_img=$array2;
+        $output_arr_comment=$array3;
         $final_result=[];
-        for($i=0;$i<count($output_arr_final);$i++){
-            $output_each=$output_arr_final[$i];
-            if($output_arr_final[$i]['category']==1){
+        for($i=0;$i<count($output_arr_main);$i++){
+            $output_each=$output_arr_main[$i];
+            if($output_arr_main[$i]['category']==1){
                 $v= '
                 <div class="flex flex-column section-userWorkDisplay-Box">
                 <div class="flex flex-row section-uploaderInfo">
@@ -41,12 +43,12 @@
                 </div>
                 <div class="flex flex-column section-workdisplay">
                 <a href="detail.html?post='.$output_each['post_id'].'">
-                <img src="uploads/images/'.$output_each['image_content'].'">
+                <img src="uploads/images/'.$output_arr_img[$i]['image_content'].'">
                 </a>
                 </div>      
                 <div class="flex flex-row section-workInteractButtons">
                 <button><img src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
-                <button><img src="img/icon-comment.svg">'.$output_each['comment_num'].'</button>
+                <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
                 </div>                                      
                 </div>                      
                 ';
@@ -69,7 +71,7 @@
                 </div>      
                 <div class="flex flex-row section-workInteractButtons">
                 <button><img src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
-                <button><img src="img/icon-comment.svg">'.$output_each['comment_num'].'</button>
+                <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
                 </div>                                      
                 </div>                      
                 ';    

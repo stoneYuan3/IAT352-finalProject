@@ -47,18 +47,35 @@
 				}
 				else{
 					//pull the actual post content based on post_id
-					$output_arr_final=[];
+					$output_arr_main=[];
+					$output_arr_img=[];
+					$output_arr_commentNum=[];
+
 					for($i=0;$i<count($output1_arr);$i++){
 						$id=$output1_arr[$i];
-						$query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
-						$result2=$database->query($query2);
-						$output2=$result2->fetch_assoc();
-						array_push($output_arr_final,$output2);
+						// $query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";
+						$query_main="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=collection.post_id";
+						$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;";	
+						$query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";							
+
+						$result_main=$database->query($query_main);
+						$output_main=$result_main->fetch_assoc();
+
+						$result_img=$database->query($query_img);
+						// for($i=0;$i<result_img->num_rows;$i++){}
+						$output_img=$result_img->fetch_assoc();
+
+						$result_comment=$database->query($query_comment);
+						$output_comment=$result_comment->fetch_assoc();
+
+						array_push($output_arr_main,$output_main);
+						array_push($output_arr_img, $output_img);
+						array_push($output_arr_commentNum, $output_comment);						
 					}
 
 					//categolary 1 is image, 2 is pure text
 					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.
-					echo json_encode(generatePosts($output_arr_final));
+					echo json_encode(generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum));
 				}
 				break;
 
@@ -146,17 +163,32 @@
 						array_push($output1_arr,$output_each[0]);
 					}
 
-					$output_arr_final=[];
+					$output_arr_main=[];
+					$output_arr_img=[];
+					$output_arr_commentNum=[];
 					for($i=0;$i<count($output1_arr);$i++){
 						$id=$output1_arr[$i];
-						$query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";	
-							$result2=$database->query($query2);
-							$output2=$result2->fetch_assoc();
-							array_push($output_arr_final,$output2);	
+						$query_main="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=collection.post_id";
+						$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;";	
+						$query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";							
+
+						$result_main=$database->query($query_main);
+						$output_main=$result_main->fetch_assoc();
+
+						$result_img=$database->query($query_img);
+						// for($i=0;$i<result_img->num_rows;$i++){}
+						$output_img=$result_img->fetch_assoc();
+
+						$result_comment=$database->query($query_comment);
+						$output_comment=$result_comment->fetch_assoc();
+
+						array_push($output_arr_main,$output_main);
+						array_push($output_arr_img, $output_img);
+						array_push($output_arr_commentNum, $output_comment);
 					}
 
 					//load posts step 3: render the information got from step 2 to html layout with generatePosts(). check functions.php
-					$v2=generatePosts($output_arr_final);				
+					$v2=generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum);				
 					$arr=['bio' => $v1,'userpost' => $v2];
 
 					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.	
