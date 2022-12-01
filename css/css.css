@@ -491,13 +491,15 @@ h1{
 
 .upload-image-box{
     width: 100%;
-    height: 20%;;
+    height: 10rem;
     background-color: #EDEDED;
     border-style: none;
     border-radius: 20px;
     font-size: 18px;
-    padding-top: 10%;
-    padding-left: 40%;
+    justify-content: center;
+    align-items: center;
+/*    padding-top: 10%;
+    padding-left: 40%;*/
 }
 
 .upload-tag{

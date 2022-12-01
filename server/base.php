@@ -1,7 +1,5 @@
-
-
 <?php
-	require_once('functions.php');
+	include('functions.php');
 	$database=db_connect($dbhost,$dbuser,$dbpass,$dbname);
 	// session_start();
 

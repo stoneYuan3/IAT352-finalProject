@@ -20,7 +20,7 @@
             </div>
         </section>
 
-        <form class="upload" action="index.html">
+        <form class="upload" role="form" enctype="multipart/form-data">
             <section class="top">
                 <h1>Content Upload</h1>
                 <label>I want to post:</label> 
@@ -29,17 +29,24 @@
             </section>
             
             <!-- reference: https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_input_accept -->
-            <input class="upload-image-box" type="file" id="img" name="img" accept="image/*" >
+            <div class="flex upload-image-box">
+                <input type="file" id="img" name="img" accept="image/*" >
+            </div>
 
             <h3>Tags</h3>
-            <input class="upload-tag"type="tags" id="tags" name="tags">
+            <input class="upload-tag"type="tags" id="tags" name="tags" placeholder="seperate each tag by ,">
 
             <h3>Descriptions</h3>
             <textarea class="upload-des-box" type="des" id="des" name="des" rows="5" cols="100"></textarea>
 
             <section class="bottom">
-                <button class ="selected" type="submit" value="submit"><strong>Submit</strong></button>
+                <button id="button-work-upload" class="selected" value="submit" type="submit"><strong>Submit</strong></button>
             </section>
         </form>
     </body>
+
+    <script src="js/jquery-3.6.1.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/upload.js"></script>
+
 </html>

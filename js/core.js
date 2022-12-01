@@ -8,6 +8,7 @@ function checkLogin(){
 
 	request.done(function(data){
 		console.log(data);
+		var userid=data;
 		console.log($('#button-index-Following').length>0);
 		var hasFollowFeature=false;
 		var hasCommentFeature=false;
@@ -30,6 +31,7 @@ function checkLogin(){
 		else{
 			$('.nav-userProfile').removeClass('hidden');
 			$('.nav-login').addClass('hidden');	
+			$('.button-nav-newPost').attr('href','upload-image.html?userid='+userid);		
 			if($('#logout').length==0){
 				$('<button id="logout">Log out</button>').insertAfter('.button-nav-newPost');
 			}
