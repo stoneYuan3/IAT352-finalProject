@@ -24,13 +24,16 @@
     }
 
 //post generation////////////////////////////////////////////////////////////////
+    //generate post preview window on index page, user profile page,etc
     function generatePosts($array1,$array2,$array3){
         $output_arr_main=$array1;
         $output_arr_img=$array2;
         $output_arr_comment=$array3;
         $final_result=[];
+
         for($i=0;$i<count($output_arr_main);$i++){
             $output_each=$output_arr_main[$i];
+            //for image post
             if($output_arr_main[$i]['category']==1){
                 $v= '
                 <div class="flex flex-column section-userWorkDisplay-Box">
@@ -54,6 +57,7 @@
                 ';
                 array_push($final_result,$v);
             }
+            //for article post
             else{
                 $v= '
                 <div class="flex flex-column section-userWorkDisplay-Box">
@@ -82,12 +86,13 @@
         return $final_result;     
     }
 
-
+    //generate post detail page for detail.html
     function generatePostDetail($array1,$array2,$array3){
         $output1=$array1;
         $output_arr_img=$array2;
         $output_arr_comment=$array3;
         $v1='';
+        //for image post
         if($output1['category']==1){
             $v1= '
             <section class="section-detail-mainContent">
@@ -111,6 +116,7 @@
             </section>                      
             ';          
         }
+        //for article post
         else{
             $v1= '
             <section class="section-detail-mainContent">
@@ -161,7 +167,15 @@
     ////////////////////
 
 
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 //old codes from other projects, may become useful reference////////////////////////////////////////////
+
     // function create_header(){
     //     session_start();
     //     echo'
@@ -223,5 +237,5 @@ function checkWatchlist($db, $product_code, $session){
     }    
     return $noDuplicate;
 }
-
+///////////////////////////////////////////////////////////////////////////////
 ?>

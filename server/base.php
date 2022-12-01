@@ -53,9 +53,11 @@
 
 					for($i=0;$i<count($output1_arr);$i++){
 						$id=$output1_arr[$i];
-						// $query2="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,images.image_content,posts.description,COUNT(collection.post_id) AS collec_num,COUNT(comments.post_id) AS comment_num FROM posts,users,images,collection,comments WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=images.post_id AND posts.post_id=collection.post_id AND posts.post_id=comments.post_id";
+						//pull main components
 						$query_main="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=collection.post_id";
+						//pull image
 						$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;";	
+						//pull comment number
 						$query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";							
 
 						$result_main=$database->query($query_main);
@@ -201,6 +203,7 @@
 			case 'loadPostDetail':
 				if(isset($_GET['post'])){
 					$post_id=$_GET['post'];
+					//prepare query for major components
 					$query_main="SELECT posts.post_id,posts.category,COUNT(collection.post_id) AS collec_num,posts.description,users.user_id,users.user_name,users.avatar FROM posts,collection,users WHERE posts.post_id=".$post_id." AND posts.post_id=collection.post_id AND posts.user_id=users.user_id";
 					$result_main=$database->query($query_main);
 					$output_main=$result_main->fetch_assoc();
@@ -216,6 +219,7 @@
 					$query_tag="SELECT posts.post_id,tags.tag_name FROM posts,tags WHERE posts.post_id=".$post_id." AND posts.post_id=tags.post_id";
 					$result_tag=$database->query($query_tag);
 					$output_tag=[];
+					//pull data
 					for($i=0;$i<$result_tag->num_rows;$i++){
 						$output_tag_each=$result_tag->fetch_assoc();
 						array_push($output_tag,$output_tag_each);
@@ -231,6 +235,7 @@
 					}
 					$v2.= '</p>';
 
+					//prepare query for comments
 					$query_comment="SELECT posts.post_id,users.user_id,users.avatar,users.user_name,comments.content,comments.upload_time FROM posts,users,comments WHERE posts.post_id=".$post_id." AND posts.post_id=comments.post_id AND users.user_id=comments.user_id";
 					$result_comment=$database->query($query_comment);
 					$output_comment=[];
@@ -239,6 +244,7 @@
 						array_push($output_comment,$output_comment_each);
 					}
 					$output_comment_final=[];
+					//pull data
 					for($i=0;$i<count($output_comment);$i++){
 						$output_each=$output_comment[$i];
 						$v='
@@ -256,6 +262,7 @@
 	                    array_push($output_comment_final,$v);
 					}
 					$v1=generatePostDetail($output_main,$output_img,$output_commNum);
+					//different parts of the page are pulled in different queries. after pulled, the pulled data will be stroed in corresponding arrays. those arrays will be put into one final array and sent back to the front end
 					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final];
 					echo json_encode($arr);
 				}		
