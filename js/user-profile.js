@@ -44,7 +44,6 @@ $('document').ready(function(){
     $('#button-index-All').addClass('selected');
     $('#button-index-Images').removeClass('selected');
     $('#button-index-Articles').removeClass('selected');
-
   });
   $('#button-index-Images').click(function(){
     $('#button-index-Images').addClass('selected');

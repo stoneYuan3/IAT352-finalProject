@@ -29,6 +29,7 @@ function checkLogin(){
 			}			
 		}
 		else{
+			//preparing the navigation bar
 			$('.nav-userProfile').removeClass('hidden');
 			$('.nav-login').addClass('hidden');	
 			$('.button-nav-newPost').attr('href','upload-image.html?userid='+userid);		

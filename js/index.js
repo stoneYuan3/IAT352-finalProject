@@ -20,8 +20,14 @@ $('document').ready(function(){
 
 	$('#button-index-All').click(function(){
 		pullIndexContent();
+	    $('#button-index-All').addClass('selected');
+	    $('#button-index-Images').removeClass('selected');
+	    $('#button-index-Articles').removeClass('selected');		
 	});
 	$('#button-index-Images').click(function(){
+	    $('#button-index-Images').addClass('selected');
+	    $('#button-index-All').removeClass('selected');
+	    $('#button-index-Articles').removeClass('selected');		
 		$.ajax({
 			type:'POST',
 			url:'server/base.php?query=loadIndex&filter=images',
@@ -37,6 +43,9 @@ $('document').ready(function(){
 		});			
 	});
 	$('#button-index-Articles').click(function(){
+	    $('#button-index-Articles').addClass('selected');
+	    $('#button-index-All').removeClass('selected');
+	    $('#button-index-Images').removeClass('selected');		
 		$.ajax({
 			type:'POST',
 			url:'server/base.php?query=loadIndex&filter=articles',
