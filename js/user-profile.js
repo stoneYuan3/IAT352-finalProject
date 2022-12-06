@@ -3,24 +3,11 @@ $('document').ready(function(){
   const urlParams = new URLSearchParams(window.location.search);
   const uid = urlParams.get('userid');
 
-  // console.log(ifLogin);
+  if(isLoggedin){
+    console.log('yes');
+  }
 
-  var request=$.ajax({
-    type:'POST',
-    url:'server/checkLogin.php?query=checkLogin',
-    data:{},
-    dataType:'text'
-  });
-  request.done(function(data){
-    var login_userid=data;
-    if(login_userid==uid){
-      console.log('log in as the user');
-      $('#button-index-Following').addClass('hidden');
-    }
-  });
-  request.fail(function(msg){
-    console.log("error", msg);
-  });   
+ 
 
   var type='posts';
   pullUserProfile(uid,type);
