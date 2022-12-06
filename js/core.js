@@ -37,10 +37,10 @@ function checkLogin(){
 				$('<button id="logout">Log out</button>').insertAfter('.button-nav-newPost');
 			}
 			$('.button-nav-profile').attr('href','user-profile.html?userid='+data);
-			if(hasFollowFeature){
-				$('#button-index-Following').removeClass('hidden');
+			// if(hasFollowFeature){
+				// $('#button-index-Following').removeClass('hidden');
 				//TBD, do something when user uses
-			}	
+			// }	
 			if(hasCommentFeature){
 				$('#section-comment-send').removeClass('hidden');
 				//TBD, do something when user uses
@@ -123,5 +123,5 @@ function pullPostDetail(post){
 }
 
 $('document').ready(function(){
-	checkLogin();
+	// checkLogin();
 })
