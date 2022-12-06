@@ -30,6 +30,13 @@ button{
 .section-workInteractButtons button{
     max-width: 5rem;
 }
+#button-cancelFollowing{
+    margin:0;
+    margin-top: 0.5rem;
+}
+.section-bio-left p{
+    margin-top: 0.5rem;
+}
 /*/////////////////////////////////////////////////////////*/
 .flex{
     display: flex;
@@ -97,6 +104,10 @@ figure img, img{
     align-items: center;
 }
 
+
+.section-bio-left{
+    align-items: center;
+}
 .section-userWorkDisplay{
     columns: 4;
     column-gap: 1rem;
@@ -632,7 +643,7 @@ h1{
 
 .profile .bio img, .user-profile .bio img{
     height: 100px;
-    width: auto;
+    width: 100px;
     margin-top: -3em;
     border-radius: 3rem;
 }

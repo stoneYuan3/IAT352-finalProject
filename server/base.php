@@ -98,8 +98,8 @@
 		                    <img src="uploads/images/'.$output1['album_cover'].'">
 		                </section>
 		                <section class="bio flex flex-row">
-		                	<div class="flex flex-column">
-			                    <img src="uploads/images/'.$output1['avatar'].'">
+		                	<div class="flex flex-column section-bio-left">
+			                    <img id="profile-avatar" src="uploads/images/'.$output1['avatar'].'">
 			                    <button id="button-index-Following" class="selected" type="follow" value="follow"><strong>Follow</strong></button>
 		                    </div>
 
@@ -262,8 +262,9 @@
 	                    array_push($output_comment_final,$v);
 					}
 					$v1=generatePostDetail($output_main,$output_img,$output_commNum);
+					$v_uploaderid=$output_main['user_id'];
 					//different parts of the page are pulled in different queries. after pulled, the pulled data will be stroed in corresponding arrays. those arrays will be put into one final array and sent back to the front end
-					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final];
+					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final, 'uploader'=>$v_uploaderid];
 					echo json_encode($arr);
 				}		
 				break;	

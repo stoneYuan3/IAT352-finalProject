@@ -3,20 +3,16 @@ $('document').ready(function(){
   const urlParams = new URLSearchParams(window.location.search);
   const uid = urlParams.get('userid');
 
-  if(isLoggedin){
-    console.log('yes');
-  }
-
- 
-
   var type='posts';
-  pullUserProfile(uid,type);
+  pullUserProfile(uid,type)
+  pullUserWork(uid,type);
+
   $('.select-posts').click(function(){
     type="posts";
     $('.select-posts').addClass('style-selected-underline');
     $('.select-collect').removeClass('style-selected-underline');
     console.log(type);
-    pullUserProfile(uid,type);
+    pullUserWork(uid,type);
   });
 
   $('.select-collect').click(function(){
@@ -24,7 +20,7 @@ $('document').ready(function(){
     $('.select-posts').removeClass('style-selected-underline');
     $('.select-collect').addClass('style-selected-underline');    
     console.log(type);
-    pullUserProfile(uid,type);
+    pullUserWork(uid,type);
   });
 
   $('#button-index-FilterBy').click(function(){
@@ -44,7 +40,7 @@ $('document').ready(function(){
     }); 
   });
   $('#button-index-All').click(function(){
-    pullUserProfile(uid,type);    
+    pullUserWork(uid,type);    
     $('#button-index-All').addClass('selected');
     $('#button-index-Images').removeClass('selected');
     $('#button-index-Articles').removeClass('selected');
