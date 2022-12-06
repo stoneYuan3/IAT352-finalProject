@@ -115,6 +115,33 @@ figure img, img{
     margin: 1rem 0;
     max-width: 70rem;
 }
+@media screen and (max-width: 1000px) and (min-width:800px){
+    .section-userWorkDisplay{
+        columns: 3;
+        column-gap: 1.5rem;
+        flex: 1 1 100%;
+        margin: 1rem 0;
+    }
+}
+
+@media screen and (max-width: 800px) and (min-width: 600px){
+    .section-userWorkDisplay{
+        columns: 2;
+        column-gap: 1.5rem;
+        flex: 1 1 100%;
+        margin: 1rem 0;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .section-userWorkDisplay{
+        columns: 1;
+        column-gap: 1.5rem;
+        flex: 1 1 100%;
+        margin: 1rem 0;
+    }
+}
+
 .section-userWorkDisplay-Box{
     border-radius: 1rem;
     margin-bottom: 1rem;
