@@ -48,9 +48,13 @@ function adjustNavigation(userid){
 var button_follow=`
  <button id="button-index-Following" class="selected" type="follow" value="follow"><strong>Follow</strong></button>
 `;
+var button_follow_indexPage=`
+<button id="button-index-Following" type="button"><strong>Following</strong></button>
+`;
 var button_cancelFollow=`
  <button id="button-cancelFollowing" class="selected"><strong>Cancel</strong></button>
 `;
+//pullIndexContent() pull all posts from the backend and display them. it only affect contents within .section-userWorkDisplay. it does not change anything for the Explore section. it does not deal with filters
 function pullIndexContent(){
 	$.ajax({
 		type:'POST',
@@ -58,7 +62,7 @@ function pullIndexContent(){
 		data:{},
 		dataType:'text',
 		success:function(data){
-			checkLogin();
+			// checkLogin();
 			var result=JSON.parse(data);		
 			$('.section-userWorkDisplay').html(result);
 		},

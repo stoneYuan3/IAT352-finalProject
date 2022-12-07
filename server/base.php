@@ -20,6 +20,12 @@
 						case 'articles':
 							$filter=' WHERE category=2';
 							break;
+						case 'follow':
+							if(isset($_GET['user'])){
+								$user=$_GET['user'];
+								$query1="SELECT posts.post_id FROM posts, (SELECT following.followed_user_id FROM following WHERE following.user_id=".$user.") AS idsrc WHERE posts.user_id=idsrc.followed_user_id";	
+							}
+							break;
 					}
 					$query1.=$filter;
 					$query1.=" ORDER BY upload_time DESC";
