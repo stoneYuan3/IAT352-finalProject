@@ -273,7 +273,15 @@
 					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final, 'uploader'=>$v_uploaderid];
 					echo json_encode($arr);
 				}		
-				break;	
+				break;
+
+			case 'addCollection':
+				if(isset($_GET['post_id']) && isset($_GET['user'])){
+					$post_id=$_GET['post_id'];
+					$userid=$_GET['user'];
+					
+				}			
+				break;
 		}
 
 	}//END if(isset($_GET['request']))//////////////////

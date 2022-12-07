@@ -55,16 +55,37 @@ var button_cancelFollow=`
  <button id="button-cancelFollowing" class="selected"><strong>Cancel</strong></button>
 `;
 //pullIndexContent() pull all posts from the backend and display them. it only affect contents within .section-userWorkDisplay. it does not change anything for the Explore section. it does not deal with filters
-function pullIndexContent(){
+function pullIndexContent(filterBy,keyword,loginID){
+	var link;
+	switch(filterBy){
+		case 'image':
+			link='server/base.php?query=loadIndex&filter=images';
+			break;
+		case 'articles':
+			link='server/base.php?query=loadIndex&filter=articles';
+			break;
+		case 'tag':
+			link='server/base.php?query=loadIndex&tag='+keyword;
+			break;
+		case 'follow':
+			link='server/base.php?query=loadIndex&filter=follow&user='+keyword;
+			break;			
+		default:
+			link='server/base.php?query=loadIndex';
+			break;
+	}
 	$.ajax({
 		type:'POST',
-		url:'server/base.php?query=loadIndex',
+		url:link,
 		data:{},
 		dataType:'text',
 		success:function(data){
-			// checkLogin();
 			var result=JSON.parse(data);		
 			$('.section-userWorkDisplay').html(result);
+			//this function enable functions for the collection button
+			if(loginID!=null){
+				addto_Collection(loginID);
+			}		
 		},
 		error:function(data){
 			console.log("an error happened, transaction failed");
@@ -112,7 +133,6 @@ function pullUserProfile(uid,type){
 										success:function(data){
 											if(data=='success'){
 												console.log('cancel success');
-												// window.location.replace("index.html");
 												pullUserProfile(uid,type)
 											}
 											else{
@@ -186,13 +206,12 @@ function pullPostDetail(post){
 		url:'server/base.php?query=loadPostDetail&post='+post,
 		data:{},
 		dataType:'text',
-		success:function(data){
 
+		success:function(data){
 			var result=JSON.parse(data);
 			$('.section-detail-mainContent').html(result.main);
 			$('.tags').html(result.tag);
 			$('.all-comment').html(result.comment);
-
 			checkLogin().done(function(data){ 
 				console.log(data);
 				if(data=='not_loggedIn'){
@@ -220,6 +239,38 @@ function pullPostDetail(post){
 	});	
 }
 
+function addto_Collection(userid){
+	$('.button-post-collect').click(function(){
+		var post_id=$(this).attr('name');
+		
+		if($(this).hasClass('collected')){
+			console.log('remove '+post_id);
+			$(this).children('img').attr('src','img/icon-like.svg');
+			$(this).removeClass('collected');
+		}
+		else{
+			console.log('add '+post_id);
+			$(this).children('img').attr('src','img/icon-like-liked.svg');
+			$(this).addClass('collected');
+			$.ajax({
+				type:'POST',
+				url:'server/base.php?query=addCollection&post='+post_id+'&user='+userid,
+				data:{},
+				dataType:'text',
+				success:function(data){
+					if(data=='success'){
+						$(this).addClass('.button-post-removeCollect');
+						$(this).removeClass('.button-post-collect');
+						$(this).html('<img id="icon-post-collect" src="img/icon-like-liked.svg">');
+					}
+					else{
+						console.log('add collection failed');
+					}
+				}			
+			});			
+		}			
+	});
+}
 
 checkLogin().done(function(data){	
 	if(data=='not_loggedIn'){

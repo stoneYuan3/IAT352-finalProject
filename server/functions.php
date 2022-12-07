@@ -50,7 +50,7 @@
                 </a>
                 </div>      
                 <div class="flex flex-row section-workInteractButtons">
-                <button><img src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
+                <button class="button-post-collect" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
                 <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
                 </div>                                      
                 </div>                      
@@ -74,7 +74,7 @@
                 </a>
                 </div>      
                 <div class="flex flex-row section-workInteractButtons">
-                <button><img src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
+                <button class="button-post-collect" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
                 <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
                 </div>                                      
                 </div>                      
