@@ -2,86 +2,70 @@
 $('document').ready(function(){
   const urlParams = new URLSearchParams(window.location.search);
   const uid = urlParams.get('userid');
-
+  var loginID=null;
   var type='posts';
-  pullUserProfile(uid,type)
-  pullUserWork(uid,type);
+  // pullUserProfile(uid,type);
 
-  $('.select-posts').click(function(){
-    type="posts";
-    $('.select-posts').addClass('style-selected-underline');
-    $('.select-collect').removeClass('style-selected-underline');
-    console.log(type);
-    pullUserWork(uid,type);
-  });
+  checkLogin().done(function(data){   
+    if(data=='not_loggedIn'){
+      pullUserProfile(uid,type,null);
+      pullUserWork(uid,type,null);
+    }
+    else{
+      loginID=data;
+      pullUserProfile(uid,type,loginID);
+      pullUserWork(uid,type,loginID);
+    }
 
-  $('.select-collect').click(function(){
-    type="collection";
-    $('.select-posts').removeClass('style-selected-underline');
-    $('.select-collect').addClass('style-selected-underline');    
-    console.log(type);
-    pullUserWork(uid,type);
-  });
+    $('.select-posts').click(function(){
+      type="posts";
+      $('.select-posts').addClass('style-selected-underline');
+      $('.select-collect').removeClass('style-selected-underline');
+      console.log(type);
+      pullUserWork(uid,type,loginID);
+    });
 
-  $('#button-index-FilterBy').click(function(){
-    var keyword=$('#input-filter').val();
-    $.ajax({
-      type:'POST',
-      url:'server/base.php?query=loadUser&uid='+uid+'&type='+type+'&tag='+keyword,
-      data:{},
-      dataType:'text',
-      success:function(data){
-        var result=JSON.parse(data);    
-        $('.section-userWorkDisplay').html(result.userpost);
-      },
-      error:function(data){
-        console.log("an error happened, transaction failed");
-      }
-    }); 
-  });
-  $('#button-index-All').click(function(){
-    pullUserWork(uid,type);    
-    $('#button-index-All').addClass('selected');
-    $('#button-index-Images').removeClass('selected');
-    $('#button-index-Articles').removeClass('selected');
-  });
-  $('#button-index-Images').click(function(){
-    $('#button-index-Images').addClass('selected');
-    $('#button-index-All').removeClass('selected');
-    $('#button-index-Articles').removeClass('selected');
+    $('.select-collect').click(function(){
+      type="collection";
+      $('.select-posts').removeClass('style-selected-underline');
+      $('.select-collect').addClass('style-selected-underline');    
+      console.log(type);
+      pullUserWork(uid,type,loginID);
+    });
 
-    $.ajax({
-      type:'POST',
-      url:'server/base.php?query=loadUser&uid='+uid+'&type='+type+'&filter=images',
-      data:{},
-      dataType:'text',
-      success:function(data){
-        var result=JSON.parse(data);    
-        $('.section-userWorkDisplay').html(result.userpost);
-      },
-      error:function(data){
-        console.log("an error happened, transaction failed");
-      }
-    });     
-  });
-  $('#button-index-Articles').click(function(){
-    $('#button-index-Articles').addClass('selected');
-    $('#button-index-All').removeClass('selected');
-    $('#button-index-Images').removeClass('selected');
+    $('#button-index-FilterBy').click(function(){
+      var keyword=$('#input-filter').val();
+      pullUserWork(uid,type,loginID,'tag',keyword);
+      $('#button-index-All').addClass('selected');
+      $('#button-index-Images').removeClass('selected');
+      $('#button-index-Articles').removeClass('selected');
+    });
 
-    $.ajax({
-      type:'POST',
-      url:'server/base.php?query=loadUser&uid='+uid+'&type='+type+'&filter=articles',
-      data:{},
-      dataType:'text',
-      success:function(data){
-        var result=JSON.parse(data);    
-        $('.section-userWorkDisplay').html(result.userpost);
-      },
-      error:function(data){
-        console.log("an error happened, transaction failed");
-      }
-    });     
-  });
 
+    $('#button-index-All').click(function(){
+      pullUserWork(uid,type,loginID);    
+      $('#button-index-All').addClass('selected');
+      $('#button-index-Images').removeClass('selected');
+      $('#button-index-Articles').removeClass('selected');
+    });
+
+
+    $('#button-index-Images').click(function(){
+      $('#button-index-Images').addClass('selected');
+      $('#button-index-All').removeClass('selected');
+      $('#button-index-Articles').removeClass('selected');
+      pullUserWork(uid,type,loginID,'image');  
+    });
+
+    $('#button-index-Articles').click(function(){
+      $('#button-index-Articles').addClass('selected');
+      $('#button-index-All').removeClass('selected');
+      $('#button-index-Images').removeClass('selected');
+      pullUserWork(uid,type,loginID,'articles');  
+    });
+
+  }); 
+  checkLogin().fail(function(data){
+    console.log('fail, '+data);
+  });
 });

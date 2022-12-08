@@ -93,7 +93,7 @@ function pullIndexContent(filterBy,keyword,loginID){
 	});	
 }
 
-function pullUserProfile(uid,type){
+function pullUserProfile(uid,type,loginID){
 	// console.log('run');
 	// console.log(type);
 	$.ajax({
@@ -102,105 +102,115 @@ function pullUserProfile(uid,type){
 		data:{},
 		dataType:'text',
 		success:function(data){
-			//receive json from php, parse it, insert into different html sections
+			//this part spawns the user profile interface
 			var result=JSON.parse(data);
 			$('.user-basicInfo').html(result.bio);	
-			//check if logged in and adjust user profile page accordingly
-			checkLogin().done(function(data){ 
-				if(data=='not_loggedIn'){
-					$('#button-index-Following').remove();
-				}
-				else{
-					//check if the profile is owned by the member, remove follow button if true
-					var userid=data;
-					if(userid==uid){
-						console.log('logged in as the owner of this profile');
-						$('#button-index-Following').remove();
-					}
-					else{
-						//check if this user is already been followed
-						checkFollowStatus(userid,uid).done(function(data){
-							if(data=='followed'){
-								$('#button-index-Following').remove();
-								$('<p>Already<br>Following</p>').insertAfter('#profile-avatar');	
-								$(button_cancelFollow).insertAfter('.section-bio-left p');
-								$('#button-cancelFollowing').click(function(){
-									$.ajax({
-										type:'POST',
-										url:'server/follow.php?query=cancelFollow&follower='+userid+'&followtarget='+uid,
-										data:{},
-										dataType:'text',
-										success:function(data){
-											if(data=='success'){
-												console.log('cancel success');
-												pullUserProfile(uid,type)
-											}
-											else{
-												console.log('cancel failed');
-											}
 
-										},
-										error:function(data){
-											console.log("an error happened, follow user failed");
-										}										
-									});
-								});
-							}
-						});						
-						$('#button-index-Following').click(function(){
-							//follow this user
+			// this part check if the user is logged in and whether this profile is owned by the member, remove follow button if true
+			var userid=loginID;
+			if(userid==null){
+				$('#button-index-Following').remove();
+			}
+			else if(userid==uid){
+				console.log('logged in as the owner of this profile');
+				$('#button-index-Following').remove();
+			}
+			else{
+				//this part check if the target user is already been followed by the viewer
+				//checkFollowStatus() stores the ajax call that asks backend to compare the target user id and the viewer id and check if a following relationship already exists
+				checkFollowStatus(userid,uid).done(function(data){
+					if(data=='followed'){
+						$('#button-index-Following').remove();
+						$('<p>Already<br>Following</p>').insertAfter('#profile-avatar');	
+						$(button_cancelFollow).insertAfter('.section-bio-left p');
+						$('#button-cancelFollowing').click(function(){
 							$.ajax({
 								type:'POST',
-								url:'server/follow.php?query=registerFollow&follower='+userid+'&followtarget='+uid,
+								url:'server/follow.php?query=cancelFollow&follower='+userid+'&followtarget='+uid,
 								data:{},
 								dataType:'text',
 								success:function(data){
 									if(data=='success'){
-										console.log('follow success');
-										pullUserProfile(uid,type);
-										// $('#button-index-Following').remove();
-										// $('<p>Already Following</p>').insertAfter('#profile-avatar');
+										console.log('cancel success');
+										pullUserProfile(uid,type,loginID)
 									}
 									else{
-										console.log('follow failed');
+										console.log('cancel failed');
 									}
-
 								},
 								error:function(data){
 									console.log("an error happened, follow user failed");
-								}								
-							});					
-						});	
-					}						
-				}
-			});
-			checkLogin().fail(function(data){
-				console.log(data);
-			});
+								}										
+							});
+						});
+					}
+				});						
+				$('#button-index-Following').click(function(){
+					//follow this user
+					$.ajax({
+						type:'POST',
+						url:'server/follow.php?query=registerFollow&follower='+userid+'&followtarget='+uid,
+						data:{},
+						dataType:'text',
+						success:function(data){
+							if(data=='success'){
+								console.log('follow success');
+								//call the function again to reload
+								pullUserProfile(uid,type,loginID);
+							}
+							else{
+								console.log('follow failed');
+							}
+
+						},
+						error:function(data){
+							console.log("an error happened, follow user failed");
+						}								
+					});					
+				});	
+			}
 		},
 		error:function(data){
 			console.log("an error happened, transaction failed");
 		}
 	});		
 }
-function pullUserWork(uid,type){
+function pullUserWork(uid,type,loginID,filterBy,keyword){
+	var link='server/base.php?query=loadUser&uid='+uid+'&type='+type;
+	switch(filterBy){
+		case 'image':
+			link+='&filter=images';
+			break;
+		case 'articles':
+			link+='&filter=articles';
+			break;
+		case 'tag':
+			link+='&tag='+keyword;
+			break;		
+		default:
+			link='server/base.php?query=loadUser&uid='+uid+'&type='+type;
+			break;
+	}
 	$.ajax({
 		type:'POST',
-		url:'server/base.php?query=loadUser&uid='+uid+'&type='+type,
+		url:link,
 		data:{},
 		dataType:'text',
 		success:function(data){
-			checkLogin();
 			//receive json from php, parse it, insert into different html sections
 			var result=JSON.parse(data);
 			$('.section-userWorkDisplay').html(result.userpost);
+			if(loginID!=null){
+				addto_Collection(loginID);
+			}				
 		},
 		error:function(data){
 			console.log("an error happened, pullUserWork failed");
 		}
 	});		
 }
-function pullPostDetail(post){
+
+function pullPostDetail(post,loginID){
 	$.ajax({
 		type:'POST',
 		url:'server/base.php?query=loadPostDetail&post='+post,
@@ -244,12 +254,12 @@ function addto_Collection(userid){
 		var post_id=$(this).attr('name');
 		
 		if($(this).hasClass('collected')){
-			console.log('remove '+post_id);
+			console.log('remove post '+post_id+" as user "+userid);
 			$(this).children('img').attr('src','img/icon-like.svg');
 			$(this).removeClass('collected');
 		}
 		else{
-			console.log('add '+post_id);
+			console.log('add post '+post_id+" as user "+userid);
 			$(this).children('img').attr('src','img/icon-like-liked.svg');
 			$(this).addClass('collected');
 			$.ajax({
@@ -272,6 +282,7 @@ function addto_Collection(userid){
 	});
 }
 
+//adjust navigation bar based on login status, apply to all pages
 checkLogin().done(function(data){	
 	if(data=='not_loggedIn'){
 		console.log('not login');
