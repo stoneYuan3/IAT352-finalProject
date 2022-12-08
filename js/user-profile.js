@@ -4,21 +4,6 @@ $('document').ready(function(){
   const uid = urlParams.get('userid');
   var loginID=null;
   var type='posts';
-<<<<<<< HEAD
-  pullUserProfile(uid,type);
-  // checkLogin().done(function(data){   
-  //   if(data=='not_loggedIn'){
-  //     $('#button-index-Following').remove();
-  //     pullIndexContent(null,null,null);
-  //   }
-  //   else{
-
-  //   } 
-  // }); 
-  pullUserWork(uid,type);
-=======
-  // pullUserProfile(uid,type);
->>>>>>> test3
 
   checkLogin().done(function(data){   
     if(data=='not_loggedIn'){
