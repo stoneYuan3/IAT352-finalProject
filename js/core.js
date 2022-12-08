@@ -14,6 +14,14 @@ function checkFollowStatus(userid,targetUid){
 		dataType:'text'
 	});	
 }
+function checkCollectionStatus(userid,targetPost){
+	return $.ajax({
+		type:'POST',
+		url:'server/base.php?query=checkCollection&userid='+userid+'&targetPost='+targetPost,
+		data:{},
+		dataType:'text'
+	});		
+}
 function adjustNavigation(userid){
 	var data=userid;
 	if(data=='not_loggedIn'){
@@ -73,6 +81,9 @@ function pullIndexContent(filterBy,keyword,loginID){
 		default:
 			link='server/base.php?query=loadIndex';
 			break;
+	}
+	if(loginID!=null){
+		link+='&loginID='+loginID;
 	}
 	$.ajax({
 		type:'POST',
@@ -191,6 +202,9 @@ function pullUserWork(uid,type,loginID,filterBy,keyword){
 			link='server/base.php?query=loadUser&uid='+uid+'&type='+type;
 			break;
 	}
+	if(loginID!=null){
+		link+='&loginID='+loginID;
+	}	
 	$.ajax({
 		type:'POST',
 		url:link,
@@ -247,6 +261,9 @@ function pullPostDetail(post,loginID){
 }
 //this function is self sufficient, deal with everything needed for add/remove collection (both frontend style changes and backend reactions)
 function addto_Collection(userid){
+
+	//TBD ask backend whether this post is already been collected and add style change accordingly
+
 	$('.button-post-collect').click(function(){
 		var post_id=$(this).attr('name');
 		
@@ -254,6 +271,23 @@ function addto_Collection(userid){
 			console.log('remove post '+post_id+" as user "+userid);
 			$(this).children('img').attr('src','img/icon-like.svg');
 			$(this).removeClass('collected');
+			$.ajax({
+				type:'POST',
+				url:'server/base.php?query=removeCollection&post='+post_id+'&user='+userid,
+				data:{},
+				dataType:'text',
+				success:function(data){
+					if(data=='success'){
+						console.log('remove collection success');
+					}
+					else{
+						console.log('remove collection failed');
+					}
+				},
+				error:function(data){
+					console.log("an error happened, transaction failed");
+				}				
+			});
 		}
 		else{
 			console.log('add post '+post_id+" as user "+userid);
@@ -266,14 +300,18 @@ function addto_Collection(userid){
 				dataType:'text',
 				success:function(data){
 					if(data=='success'){
-						$(this).addClass('.button-post-removeCollect');
-						$(this).removeClass('.button-post-collect');
-						$(this).html('<img id="icon-post-collect" src="img/icon-like-liked.svg">');
+						// $(this).addClass('.button-post-removeCollect');
+						// $(this).removeClass('.button-post-collect');
+						// $(this).html('<img id="icon-post-collect" src="img/icon-like-liked.svg">');
+						console.log('add collection success');
 					}
 					else{
 						console.log('add collection failed');
 					}
-				}			
+				},
+				error:function(data){
+					console.log("an error happened, transaction failed");
+				}							
 			});			
 		}			
 	});

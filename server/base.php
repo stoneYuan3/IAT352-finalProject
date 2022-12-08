@@ -56,7 +56,7 @@
 					$output_arr_main=[];
 					$output_arr_img=[];
 					$output_arr_commentNum=[];
-
+					//output1_arr contains the list of post id. the function below take those post id and render the entire post box based on the post id
 					for($i=0;$i<count($output1_arr);$i++){
 						$id=$output1_arr[$i];
 						//pull main components
@@ -65,9 +65,23 @@
 						$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;";	
 						//pull comment number
 						$query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";							
-
 						$result_main=$database->query($query_main);
 						$output_main=$result_main->fetch_assoc();
+
+						//check if this post is collected, add the result to the array
+						if(isset($_GET['loginID'])){
+							$loginID=$_GET['loginID'];
+
+							if(isCollected($loginID,$output_main['post_id'],$database)){
+								$output_checkCollect=['collected'=>'yes'];
+							}
+							else{
+								$output_checkCollect=['collected'=>'no'];
+							}
+							$output_main=array_merge($output_main,$output_checkCollect);
+							// print_r($output_main);
+						}
+
 
 						$result_img=$database->query($query_img);
 						// for($i=0;$i<result_img->num_rows;$i++){}
@@ -189,6 +203,19 @@
 
 						$result_comment=$database->query($query_comment);
 						$output_comment=$result_comment->fetch_assoc();
+						
+						if(isset($_GET['loginID'])){
+							$loginID=$_GET['loginID'];
+
+							if(isCollected($loginID,$output_main['post_id'],$database)){
+								$output_checkCollect=['collected'=>'yes'];
+							}
+							else{
+								$output_checkCollect=['collected'=>'no'];
+							}
+							$output_main=array_merge($output_main,$output_checkCollect);
+							// print_r($output_main);
+						}
 
 						array_push($output_arr_main,$output_main);
 						array_push($output_arr_img, $output_img);
@@ -276,10 +303,43 @@
 				break;
 
 			case 'addCollection':
-				if(isset($_GET['post_id']) && isset($_GET['user'])){
-					$post_id=$_GET['post_id'];
-					$userid=$_GET['user'];		
+				if(isset($_GET['post']) && isset($_GET['user'])){
+					$userid=$_GET['user'];						
+					$post_id=$_GET['post'];
+
+					//by Winkie
+                    $query_addCollection = "INSERT INTO collection (user_id, post_id)";
+                    $query_addCollection.=" VALUES(?,?)";
+                    
+                    $stmt=$database->prepare($query_addCollection);
+                    $stmt->bind_param('ii',$userid,$post_id);
+                    if($stmt->execute()){ echo 'success'; }
+                    else{ echo 'fail'; }   
+                    //by Winkie END         
 				}			
+				break;
+			case 'removeCollection':
+				if(isset($_GET['post']) && isset($_GET['user'])){
+					$userid=$_GET['user'];						
+					$post_id=$_GET['post'];
+					//DELETE FROM `collection` WHERE `collection`.`collection_id` = 164
+				}				
+				break;
+			case 'checkCollection':
+				if(isset($_GET['userid']) && isset($_GET['targetPost'])){
+					$userid=$_GET['userid'];						
+					$post_id=$_GET['targetPost'];
+
+					$query_checkCollect="SELECT user_id,post_id FROM collection WHERE user_id=".$userid." AND post_id=".$post_id;
+					$result_checkCollect=$database->query($query_checkCollect);
+					$output_checkCollect=$result_checkCollect->fetch_assoc();
+					if($output_checkCollect!=null){
+						echo 'collected';
+					}
+					else{
+						echo 'not_collected';
+					}							
+				}
 				break;
 		}
 

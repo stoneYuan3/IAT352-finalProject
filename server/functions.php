@@ -50,13 +50,36 @@
                 </a>
                 </div>      
                 <div class="flex flex-row section-workInteractButtons">
-                <button class="button-post-collect" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
+                ';
+
+                $v_collectButton='
+                    <button class="button-post-collect" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
+                ';
+                if(isset($output_each['collected'])){
+                    if($output_each['collected']=='yes'){
+                        $v_collectButton=
+                            '
+                            <button class="button-post-collect collected" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like-liked.svg">'.$output_each['collec_num'].'</button>
+                            ';
+                    }                    
+                }
+                $v.=$v_collectButton;
+
+                $v.=
+                '
                 <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
                 </div>                                      
                 </div>                      
                 ';
                 array_push($final_result,$v);
             }
+
+            //////////////////////////////////////////////////////////////
+            //TBD, apply collection detection to article posts as well
+            //apply collection detection to work detail page
+            //check issue: collection number appears to be inaccurate
+            //////////////////////////////////////////////////////////////
+
             //for article post
             else{
                 $v= '
@@ -147,6 +170,19 @@
         }
         //return the array $final_result
         return $v1;     
+    }
+
+
+    function isCollected($userid,$post_id,$database){
+        $query_checkCollect="SELECT user_id,post_id FROM collection WHERE user_id=".$userid." AND post_id=".$post_id;
+        $result_checkCollect=$database->query($query_checkCollect);
+        $output_checkCollect=$result_checkCollect->fetch_assoc();
+        if($output_checkCollect==null){
+            return false;
+        }
+        else{
+            return true;
+        }           
     }
 
 
