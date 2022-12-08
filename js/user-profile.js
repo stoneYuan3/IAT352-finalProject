@@ -4,7 +4,16 @@ $('document').ready(function(){
   const uid = urlParams.get('userid');
 
   var type='posts';
-  pullUserProfile(uid,type)
+  pullUserProfile(uid,type);
+  // checkLogin().done(function(data){   
+  //   if(data=='not_loggedIn'){
+  //     $('#button-index-Following').remove();
+  //     pullIndexContent(null,null,null);
+  //   }
+  //   else{
+
+  //   } 
+  // }); 
   pullUserWork(uid,type);
 
   $('.select-posts').click(function(){

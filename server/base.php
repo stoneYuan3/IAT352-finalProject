@@ -278,8 +278,7 @@
 			case 'addCollection':
 				if(isset($_GET['post_id']) && isset($_GET['user'])){
 					$post_id=$_GET['post_id'];
-					$userid=$_GET['user'];
-					
+					$userid=$_GET['user'];		
 				}			
 				break;
 		}

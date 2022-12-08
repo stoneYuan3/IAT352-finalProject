@@ -82,7 +82,7 @@ function pullIndexContent(filterBy,keyword,loginID){
 		success:function(data){
 			var result=JSON.parse(data);		
 			$('.section-userWorkDisplay').html(result);
-			//this function enable functions for the collection button
+			//this function enable functions for the collection button only when user is logged in
 			if(loginID!=null){
 				addto_Collection(loginID);
 			}		
@@ -238,7 +238,7 @@ function pullPostDetail(post){
 		}
 	});	
 }
-
+//this function is self sufficient, deal with everything needed for add/remove collection (both frontend style changes and backend reactions)
 function addto_Collection(userid){
 	$('.button-post-collect').click(function(){
 		var post_id=$(this).attr('name');
