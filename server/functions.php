@@ -100,11 +100,17 @@
             <img src="uploads/images/'.$output_arr_img['image_content'].'">
             </section>
             <section class="description">
-            <img src="img/liked.png">
-            <label>'.$output1['collec_num'].'</label>
-            <img src="img/comment.png">
-            <label>'.$output_arr_comment['comment_num'].'</label>
+
+            <button class="button-post-collect" name="'.$output1['post_id'].'">
+                <img id="icon-post-collect" src="img/icon-like.svg">'.$output1['collec_num'].'
+            </button>
+
+            <button>
+                <img src="img/icon-comment.svg">'.$output_arr_comment['comment_num'].'
+            </button>
+
             <label class="view">13452 views</label>
+
             <section class="tags">
             </section>
             <p>'.$output1['description'].'</p>

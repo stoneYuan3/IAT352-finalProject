@@ -70,6 +70,20 @@ figure img, img{
   max-width: 100%;
   height: auto; 
 }
+.description button{
+/*    display: flex;*/
+    background-color: none;
+    border:none;
+    padding-top: 0;
+    padding-left: 0.75rem;
+    padding-right: 0;
+}
+.description button img{
+    width:1.75rem;
+    height: 1.75rem;
+    margin-right: 0.5rem;
+    border-radius: 0;
+}
 .logo img{
     width: 10rem;
 }
@@ -103,8 +117,6 @@ figure img, img{
 .nav-userProfile{
     align-items: center;
 }
-
-
 .section-bio-left{
     align-items: center;
 }
@@ -608,6 +620,7 @@ h1{
     padding: .5em;
     margin-top: 1em;
     margin-bottom: 1em;
+    text-align: center;
 }
 
 .description .username, .user-comments .username{
@@ -621,7 +634,7 @@ h1{
     margin-right: 1em;
 }
 
-.description button, .user-comments button {
+.user-comments button {
     background-color:#FFDA57;
     border-style: none;
     font-size: 16px;
