@@ -222,25 +222,22 @@ function pullPostDetail(post,loginID){
 			$('.section-detail-mainContent').html(result.main);
 			$('.tags').html(result.tag);
 			$('.all-comment').html(result.comment);
-			checkLogin().done(function(data){ 
-				console.log(data);
-				if(data=='not_loggedIn'){
+			// checkLogin().done(function(data){ 
+			console.log(data);
+			if(loginID==null){
+				$('#section-comment-send').addClass('hidden');
+			}
+			else{	
+				var userid=loginID;
+				if(userid==result.uploader){
 					$('#section-comment-send').addClass('hidden');
+					addto_Collection(loginID);
 				}
-				else{	
-					var userid=data;
-					if(userid==result.uploader){
-						$('#section-comment-send').addClass('hidden');
-					}
-					else{
-						$('#section-comment-send').removeClass('hidden');
-					}	
-				}
-			});
-			checkLogin().fail(function(data){
-				console.log(data);
-			});
-			//receive json from php, parse it, insert into different html sections
+				else{
+					$('#section-comment-send').removeClass('hidden');
+					addto_Collection(loginID);
+				}	
+			}
 	
 		},
 		error:function(data){
