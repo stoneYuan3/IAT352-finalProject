@@ -42,63 +42,13 @@
 
 				//use the query prepared above to pull the list of post_id, and put in an array for future use
 				$result1=$database->query($query1);
-				$output1_arr=[];
+				$output_postID_list=[];
 				for($i=0;$i<$result1->num_rows;$i++){
 					$output_each=$result1->fetch_row();
-					array_push($output1_arr,$output_each[0]);
+					array_push($output_postID_list,$output_each[0]);
 				}
-
-				if(count($output1_arr)==0){
-					//TBD, place a placeholder text saying that nothing matches with your query
-				}
-				else{
-					//pull the actual post content based on post_id
-					$output_arr_main=[];
-					$output_arr_img=[];
-					$output_arr_commentNum=[];
-					//output1_arr contains the list of post id. the function below take those post id and render the entire post box based on the post id
-					for($i=0;$i<count($output1_arr);$i++){
-						$id=$output1_arr[$i];
-						//pull main components
-						$query_main="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=collection.post_id";
-						//pull image
-						$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;";	
-						//pull comment number
-						$query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";							
-						$result_main=$database->query($query_main);
-						$output_main=$result_main->fetch_assoc();
-
-						//check if this post is collected, add the result to the array
-						if(isset($_GET['loginID'])){
-							$loginID=$_GET['loginID'];
-
-							if(isCollected($loginID,$output_main['post_id'],$database)){
-								$output_checkCollect=['collected'=>'yes'];
-							}
-							else{
-								$output_checkCollect=['collected'=>'no'];
-							}
-							$output_main=array_merge($output_main,$output_checkCollect);
-							// print_r($output_main);
-						}
-
-
-						$result_img=$database->query($query_img);
-						// for($i=0;$i<result_img->num_rows;$i++){}
-						$output_img=$result_img->fetch_assoc();
-
-						$result_comment=$database->query($query_comment);
-						$output_comment=$result_comment->fetch_assoc();
-
-						array_push($output_arr_main,$output_main);
-						array_push($output_arr_img, $output_img);
-						array_push($output_arr_commentNum, $output_comment);						
-					}
-
-					//categolary 1 is image, 2 is pure text
-					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.
-					echo json_encode(generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum));
-				}
+				$output_final=pullPosts($output_postID_list,$database);
+				echo json_encode($output_final);
 				break;
 
 			//for user-profile.html
@@ -154,6 +104,8 @@
 							$query_from="posts,collection";
 							$query_where="posts.post_id=collection.post_id AND collection.user_id=".$uid;		
 						}
+						//TBD: error handling: set an else{} statement to cover cases where type does not equal to any of those values stated above
+
 						//if user is filtering by tag, add corresponding commands to the query
 						if(isset($_GET['tag'])){
 							$query_from.=",tags";
@@ -175,55 +127,29 @@
 						//specifiy that result should be ordered by upload time and finish the query by putting all components together
 						$query_where.=" ORDER BY upload_time DESC";
 						$query1="SELECT ".$query_select." FROM ".$query_from." WHERE ".$query_where;
+						// echo $query1;
 					}
 
 					//load posts step 2: pull post information needed for the final layout based on the list of post_id, and return an array of information		
 					$result1=$database->query($query1);
-					$output1_arr=[];
+					$output_postID_list=[];
 					for($i=0;$i<$result1->num_rows;$i++){
 						$output_each=$result1->fetch_row();
-						array_push($output1_arr,$output_each[0]);
+						array_push($output_postID_list,$output_each[0]);
 					}
 
-					$output_arr_main=[];
-					$output_arr_img=[];
-					$output_arr_commentNum=[];
-					for($i=0;$i<count($output1_arr);$i++){
-						$id=$output1_arr[$i];
-						$query_main="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=collection.post_id";
-						$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;";	
-						$query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";							
-
-						$result_main=$database->query($query_main);
-						$output_main=$result_main->fetch_assoc();
-
-						$result_img=$database->query($query_img);
-						// for($i=0;$i<result_img->num_rows;$i++){}
-						$output_img=$result_img->fetch_assoc();
-
-						$result_comment=$database->query($query_comment);
-						$output_comment=$result_comment->fetch_assoc();
-						
-						if(isset($_GET['loginID'])){
-							$loginID=$_GET['loginID'];
-
-							if(isCollected($loginID,$output_main['post_id'],$database)){
-								$output_checkCollect=['collected'=>'yes'];
-							}
-							else{
-								$output_checkCollect=['collected'=>'no'];
-							}
-							$output_main=array_merge($output_main,$output_checkCollect);
-							// print_r($output_main);
-						}
-
-						array_push($output_arr_main,$output_main);
-						array_push($output_arr_img, $output_img);
-						array_push($output_arr_commentNum, $output_comment);
-					}
-
+					///////////////////////////////////////////////////////
+					$v2=pullPosts($output_postID_list,$database);
 					//load posts step 3: render the information got from step 2 to html layout with generatePosts(). check functions.php
-					$v2=generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum);				
+					// if($listof_rawPost!=null){
+					// 	$v2=generatePosts($listof_rawPost['main'],$listof_rawPost['img'],$listof_rawPost['commentNum'],$listof_rawPost['collectNum']);	
+					// }
+					// else{
+					// 	$v2='<p class="section-empty">this user doesnt have any posts under this category!</p>';
+					// }
+					//////////////////////////////////////////////////////
+
+
 					$arr=['bio' => $v1,'userpost' => $v2];
 
 					//instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.	
@@ -294,6 +220,20 @@
 	                    ';
 	                    array_push($output_comment_final,$v);
 					}
+
+	                if(isset($_GET['loginID'])){
+	                    $loginID=$_GET['loginID'];
+
+	                    if(isCollected($loginID,$output_main['post_id'],$database)){
+	                        $output_checkCollect=['collected'=>'yes'];
+	                    }
+	                    else{
+	                        $output_checkCollect=['collected'=>'no'];
+	                    }
+	                    $output_main=array_merge($output_main,$output_checkCollect);
+	                    // print_r($output_main);
+	                }          
+
 					$v1=generatePostDetail($output_main,$output_img,$output_commNum);
 					$v_uploaderid=$output_main['user_id'];
 					//different parts of the page are pulled in different queries. after pulled, the pulled data will be stroed in corresponding arrays. those arrays will be put into one final array and sent back to the front end
@@ -322,24 +262,12 @@
 				if(isset($_GET['post']) && isset($_GET['user'])){
 					$userid=$_GET['user'];						
 					$post_id=$_GET['post'];
-					//DELETE FROM `collection` WHERE `collection`.`collection_id` = 164
-				}				
-				break;
-			case 'checkCollection':
-				if(isset($_GET['userid']) && isset($_GET['targetPost'])){
-					$userid=$_GET['userid'];						
-					$post_id=$_GET['targetPost'];
 
-					$query_checkCollect="SELECT user_id,post_id FROM collection WHERE user_id=".$userid." AND post_id=".$post_id;
-					$result_checkCollect=$database->query($query_checkCollect);
-					$output_checkCollect=$result_checkCollect->fetch_assoc();
-					if($output_checkCollect!=null){
-						echo 'collected';
-					}
-					else{
-						echo 'not_collected';
-					}							
-				}
+					$query_deleteCollect="DELETE FROM collection WHERE collection.user_id=".$userid." AND collection.post_id=".$post_id;
+                    $result_deleteCollect=$database->query($query_deleteCollect);
+                    if($result_deleteCollect){ echo 'success'; }
+                    else{ echo 'fail'; }   				
+                }				
 				break;
 		}
 

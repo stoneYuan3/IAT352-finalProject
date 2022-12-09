@@ -92,6 +92,17 @@
 			session_destroy();
 		}
 
+
+		if($_GET['query']=='pullUserInfo'){
+			if(isset($_GET['userid'])){
+				$userid=$_GET['userid'];
+				$query="SELECT users.user_id,users.user_name,users.email,users.avatar FROM users WHERE users.user_id=".$userid;
+				$result=$database->query($query);
+				$output=$result->fetch_assoc();
+				echo json_encode($output);
+			}
+		}
+
 	}
 
 ?>

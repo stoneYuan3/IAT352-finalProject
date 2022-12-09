@@ -25,17 +25,19 @@
 
 //post generation////////////////////////////////////////////////////////////////
     //generate post preview window on index page, user profile page,etc
-    function generatePosts($array1,$array2,$array3){
+    function generatePosts($array1,$array2,$array3,$array4){
         $output_arr_main=$array1;
         $output_arr_img=$array2;
         $output_arr_comment=$array3;
+        $output_arr_collect=$array4;
         $final_result=[];
 
+        $v='<div class="section-userWorkDisplay">';
         for($i=0;$i<count($output_arr_main);$i++){
             $output_each=$output_arr_main[$i];
             //for image post
             if($output_arr_main[$i]['category']==1){
-                $v= '
+                $v.= '
                 <div class="flex flex-column section-userWorkDisplay-Box">
                 <div class="flex flex-row section-uploaderInfo">
                 <a href="user-profile.html?userid='.$output_each['user_id'].'" class="flex flex-row flex_center_align_horizontal">
@@ -48,30 +50,7 @@
                 <a href="detail.html?post='.$output_each['post_id'].'">
                 <img src="uploads/images/'.$output_arr_img[$i]['image_content'].'">
                 </a>
-                </div>      
-                <div class="flex flex-row section-workInteractButtons">
-                ';
-
-                $v_collectButton='
-                    <button class="button-post-collect" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
-                ';
-                if(isset($output_each['collected'])){
-                    if($output_each['collected']=='yes'){
-                        $v_collectButton=
-                            '
-                            <button class="button-post-collect collected" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like-liked.svg">'.$output_each['collec_num'].'</button>
-                            ';
-                    }                    
-                }
-                $v.=$v_collectButton;
-
-                $v.=
-                '
-                <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
-                </div>                                      
-                </div>                      
-                ';
-                array_push($final_result,$v);
+                </div>';
             }
 
             //////////////////////////////////////////////////////////////
@@ -82,7 +61,7 @@
 
             //for article post
             else{
-                $v= '
+                $v.= '
                 <div class="flex flex-column section-userWorkDisplay-Box">
                 <div class="flex flex-row section-uploaderInfo">
                 <a href="user-profile.html?userid='.$output_each['user_id'].'" class="flex flex-row flex_center_align_horizontal">
@@ -95,16 +74,30 @@
                 <a href="detail.html?post='.$output_each['post_id'].'">
                 <p>'.$output_each['description'].'</p>
                 </a>
-                </div>      
-                <div class="flex flex-row section-workInteractButtons">
-                <button class="button-post-collect" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output_each['collec_num'].'</button>
-                <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
-                </div>                                      
-                </div>                      
-                ';    
-                array_push($final_result,$v);                  
+                </div>  ';
             }
+
+            $v.='<div class="flex flex-row section-workInteractButtons">';
+            $v_collectButton='
+                <button class="button-post-collect" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output_arr_collect[$i]['collec_num'].'</button>
+            ';
+            if(isset($output_each['collected'])){
+                if($output_each['collected']=='yes'){
+                    $v_collectButton=
+                        '
+                        <button class="button-post-collect collected" name="'.$output_each['post_id'].'"><img id="icon-post-collect" src="img/icon-like-liked.svg">'.$output_arr_collect[$i]['collec_num'].'</button>
+                        ';
+                }                    
+            }
+            $v.=$v_collectButton;
+            $v.='
+            <button><img src="img/icon-comment.svg">'.$output_arr_comment[$i]['comment_num'].'</button>
+            </div>                                      
+            </div>                      
+            ';                
         }   
+        $v.='</div>';
+        array_push($final_result,$v);  
         //return the array $final_result
         return $final_result;     
     }
@@ -122,12 +115,21 @@
             <section class="picture">
             <img src="uploads/images/'.$output_arr_img['image_content'].'">
             </section>
-            <section class="description">
+            <section class="description">';
 
-            <button class="button-post-collect" name="'.$output1['post_id'].'">
-                <img id="icon-post-collect" src="img/icon-like.svg">'.$output1['collec_num'].'
-            </button>
-
+            $v_collectButton='
+                <button class="button-post-collect" name="'.$output1['post_id'].'"><img id="icon-post-collect" src="img/icon-like.svg">'.$output1['collec_num'].'</button>
+            ';
+            if(isset($output1['collected'])){
+                if($output1['collected']=='yes'){
+                    $v_collectButton=
+                        '
+                        <button class="button-post-collect collected" name="'.$output1['post_id'].'"><img id="icon-post-collect" src="img/icon-like-liked.svg">'.$output1['collec_num'].'</button>
+                        ';
+                }                    
+            }
+            $v1.=$v_collectButton;
+            $v1.='
             <button>
                 <img src="img/icon-comment.svg">'.$output_arr_comment['comment_num'].'
             </button>
@@ -171,6 +173,73 @@
         //return the array $final_result
         return $v1;     
     }
+
+    function pullPosts($list_of_postID,$database){
+        $output1_arr=$list_of_postID;
+        $listof_posts_raw=[];
+        if(count($output1_arr)==0){
+            // return null;
+            return '<p class="section-empty">There are no posts under this category!</p>';
+            //TBD, place a placeholder text saying that nothing matches with your query
+        }
+        else{
+            //pull the actual post content based on post_id
+            $output_arr_main=[];
+            $output_arr_collectNum=[];
+            $output_arr_img=[];
+            $output_arr_commentNum=[];
+            //output1_arr contains the list of post id. the function below take those post id and render the entire post box based on the post id
+            for($i=0;$i<count($output1_arr);$i++){
+                $id=$output1_arr[$i];
+                //pull main components
+                $query_main="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=collection.post_id";
+                $query_collection="SELECT COUNT(collection.post_id) AS collec_num FROM collection,posts WHERE posts.post_id='".$id."' AND posts.post_id=collection.post_id";
+                //pull image
+                $query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;"; 
+                //pull comment number
+                $query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";                           
+                $result_main=$database->query($query_main);
+                $output_main=$result_main->fetch_assoc();
+
+                $result_collect=$database->query($query_collection);
+                $output_collect=$result_collect->fetch_assoc();                     
+                //check if this post is collected, add the result to the array
+                if(isset($_GET['loginID'])){
+                    $loginID=$_GET['loginID'];
+
+                    if(isCollected($loginID,$output_main['post_id'],$database)){
+                        $output_checkCollect=['collected'=>'yes'];
+                    }
+                    else{
+                        $output_checkCollect=['collected'=>'no'];
+                    }
+                    $output_main=array_merge($output_main,$output_checkCollect);
+                    // print_r($output_main);
+                }
+
+                $result_img=$database->query($query_img);
+                $output_img=$result_img->fetch_assoc();
+
+                $result_comment=$database->query($query_comment);
+                $output_comment=$result_comment->fetch_assoc();
+
+                array_push($output_arr_main,$output_main);
+                array_push($output_arr_collectNum, $output_collect);
+                array_push($output_arr_img, $output_img);
+                array_push($output_arr_commentNum, $output_comment);                        
+            }
+
+            return generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum,$output_arr_collectNum);
+
+            // $listof_posts_raw=['main'=>$output_arr_main,'img'=>$output_arr_img,'commentNum'=>$output_arr_commentNum,'collectNum'=>$output_arr_collectNum];
+            // return $listof_posts_raw;
+
+            //categolary 1 is image, 2 is pure text
+            //instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.
+            // echo json_encode(generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum,$output_arr_collectNum));
+        }    
+    }
+
 
 
     function isCollected($userid,$post_id,$database){

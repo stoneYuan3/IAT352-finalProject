@@ -22,6 +22,14 @@ function checkCollectionStatus(userid,targetPost){
 		dataType:'text'
 	});		
 }
+function pullUserInfo(userid){
+	return $.ajax({
+		type:'POST',
+		url:'server/checkLogin.php?query=pullUserInfo&userid='+userid,
+		data:{},
+		dataType:'text'			
+	});	
+}
 function adjustNavigation(userid){
 	var data=userid;
 	if(data=='not_loggedIn'){
@@ -32,7 +40,17 @@ function adjustNavigation(userid){
 		//preparing the navigation bar
 		$('.nav-userProfile').removeClass('hidden');
 		$('.nav-login').addClass('hidden');	
-		$('.button-nav-newPost').attr('href','upload-image.html?userid='+userid);		
+		$('.button-nav-newPost').attr('href','upload-image.html?userid='+userid);
+
+		pullUserInfo(userid).done(function(data){
+			var result=JSON.parse(data);
+			// console.log(result.avatar);
+			$('.button-nav-profile img').attr('src','uploads/images/'+result.avatar);
+		});
+		pullUserInfo(userid).fail(function(data){
+			console.log(data);
+		});
+
 		if($('#logout').length==0){
 			$('<button id="logout">Log out</button>').insertAfter('.button-nav-newPost');
 		}
@@ -85,6 +103,7 @@ function pullIndexContent(filterBy,keyword,loginID){
 	if(loginID!=null){
 		link+='&loginID='+loginID;
 	}
+	// console.log(link);
 	$.ajax({
 		type:'POST',
 		url:link,
@@ -92,7 +111,7 @@ function pullIndexContent(filterBy,keyword,loginID){
 		dataType:'text',
 		success:function(data){
 			var result=JSON.parse(data);		
-			$('.section-userWorkDisplay').html(result);
+			$('.all').html(result);
 			//this function enable functions for the collection button only when user is logged in
 			if(loginID!=null){
 				addto_Collection(loginID);
@@ -213,7 +232,7 @@ function pullUserWork(uid,type,loginID,filterBy,keyword){
 		success:function(data){
 			//receive json from php, parse it, insert into different html sections
 			var result=JSON.parse(data);
-			$('.section-userWorkDisplay').html(result.userpost);
+			$('.all').html(result.userpost);
 			if(loginID!=null){
 				addto_Collection(loginID);
 			}				
@@ -225,9 +244,13 @@ function pullUserWork(uid,type,loginID,filterBy,keyword){
 }
 
 function pullPostDetail(post,loginID){
+	var link='server/base.php?query=loadPostDetail&post='+post;
+	if(loginID!=null){
+		link+='&loginID='+loginID;
+	}	
 	$.ajax({
 		type:'POST',
-		url:'server/base.php?query=loadPostDetail&post='+post,
+		url:link,
 		data:{},
 		dataType:'text',
 
@@ -236,8 +259,6 @@ function pullPostDetail(post,loginID){
 			$('.section-detail-mainContent').html(result.main);
 			$('.tags').html(result.tag);
 			$('.all-comment').html(result.comment);
-			// checkLogin().done(function(data){ 
-			console.log(data);
 			if(loginID==null){
 				$('#section-comment-send').addClass('hidden');
 			}
@@ -262,8 +283,6 @@ function pullPostDetail(post,loginID){
 //this function is self sufficient, deal with everything needed for add/remove collection (both frontend style changes and backend reactions)
 function addto_Collection(userid){
 
-	//TBD ask backend whether this post is already been collected and add style change accordingly
-
 	$('.button-post-collect').click(function(){
 		var post_id=$(this).attr('name');
 		
@@ -278,9 +297,11 @@ function addto_Collection(userid){
 				dataType:'text',
 				success:function(data){
 					if(data=='success'){
+						console.log(data);
 						console.log('remove collection success');
 					}
 					else{
+						console.log(data);
 						console.log('remove collection failed');
 					}
 				},
@@ -303,10 +324,12 @@ function addto_Collection(userid){
 						// $(this).addClass('.button-post-removeCollect');
 						// $(this).removeClass('.button-post-collect');
 						// $(this).html('<img id="icon-post-collect" src="img/icon-like-liked.svg">');
+						console.log(data);
 						console.log('add collection success');
 					}
 					else{
-						console.log('add collection failed');
+						console.log(data);
+						// console.log('add collection failed');
 					}
 				},
 				error:function(data){

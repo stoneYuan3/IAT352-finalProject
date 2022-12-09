@@ -16,6 +16,9 @@ $('document').ready(function(){
       pullUserWork(uid,type,loginID);
     }
 
+    //TBD:let filterby work with upper level filters
+    //idea: set type, filter, keyword as global variables. whenever user click something, set those variables to corresponding values (i.e, click image set filter=image), send all variables to backend whenever something is clicked)
+
     $('.select-posts').click(function(){
       type="posts";
       $('.select-posts').addClass('style-selected-underline');

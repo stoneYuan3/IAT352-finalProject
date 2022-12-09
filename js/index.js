@@ -16,7 +16,7 @@ $('document').ready(function(){
 			    $('#button-index-Images').removeClass('selected');
 			    $('#button-index-Articles').removeClass('selected');
 
-			    pullIndexContent('follow',loginID);
+			    pullIndexContent('follow',loginID,loginID);
 			});
 		}
 		console.log(loginID);

@@ -107,6 +107,7 @@ figure img, img{
 }
 .button-nav-profile img{
     max-width: 3rem;
+    border-radius: 3rem;
 }
 .button-nav-newPost{
     padding:0.5rem;
@@ -116,6 +117,15 @@ figure img, img{
 }
 .nav-userProfile{
     align-items: center;
+}
+
+
+.section-empty{
+    font-size: 6rem;
+    font-weight: bold;
+    color:grey;
+    text-align: center;
+/*    margin:1rem 4rem;*/
 }
 .section-bio-left{
     align-items: center;
