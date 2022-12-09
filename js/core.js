@@ -82,27 +82,34 @@ var button_cancelFollow=`
 `;
 //pullIndexContent() pull all posts from the backend and display them. it only affect contents within .section-userWorkDisplay. it does not change anything for the Explore section. it does not deal with filters
 function pullIndexContent(filterBy,keyword,loginID){
-	var link;
+	var link='server/base.php?query=loadIndex';
+	var filter='&filter=none';
+	var tag='&tag=none';
 	switch(filterBy){
-		case 'image':
-			link='server/base.php?query=loadIndex&filter=images';
+		case 'images':
+			filter='&filter=images';
 			break;
 		case 'articles':
-			link='server/base.php?query=loadIndex&filter=articles';
-			break;
-		case 'tag':
-			link='server/base.php?query=loadIndex&tag='+keyword;
-			break;
+			filter='&filter=articles';
+			break;	
 		case 'follow':
-			link='server/base.php?query=loadIndex&filter=follow&user='+keyword;
-			break;			
+			if(loginID!=null){ filter='&filter=follow&user='+loginID; }
+			else{ console.log('why are you even here,you are not even logged in') }
+			break;				
 		default:
 			link='server/base.php?query=loadIndex';
 			break;
 	}
+	link+=filter;
+	// link+=tag;
 	if(loginID!=null){
 		link+='&loginID='+loginID;
+	}	
+	if(keyword!=null){
+		tag='&tag='+keyword;
+		link+=tag;
 	}
+	console.log(link);
 	// console.log(link);
 	$.ajax({
 		type:'POST',
@@ -207,23 +214,29 @@ function pullUserProfile(uid,type,loginID){
 }
 function pullUserWork(uid,type,loginID,filterBy,keyword){
 	var link='server/base.php?query=loadUser&uid='+uid+'&type='+type;
+	var filter='&filter=none';
+	var tag='&tag=none';
 	switch(filterBy){
 		case 'image':
-			link+='&filter=images';
+			filter='&filter=images';
 			break;
 		case 'articles':
-			link+='&filter=articles';
-			break;
-		case 'tag':
-			link+='&tag='+keyword;
-			break;		
+			filter='&filter=articles';
+			break;	
 		default:
 			link='server/base.php?query=loadUser&uid='+uid+'&type='+type;
 			break;
 	}
+	link+=filter;
+	// link+=tag;
 	if(loginID!=null){
 		link+='&loginID='+loginID;
 	}	
+	if(keyword!=null){
+		tag='&tag='+keyword;
+		link+=tag;
+	}
+	console.log(link);
 	$.ajax({
 		type:'POST',
 		url:link,

@@ -4,16 +4,19 @@ $('document').ready(function(){
   const uid = urlParams.get('userid');
   var loginID=null;
   var type='posts';
+  var filter=null;
+  var tag=null;
 
   checkLogin().done(function(data){   
     if(data=='not_loggedIn'){
-      pullUserProfile(uid,type,null);
-      pullUserWork(uid,type,null);
+      loginID=null;
+      pullUserProfile(uid,type,loginID,filter,tag);
+      pullUserWork(uid,type,loginID,filter,tag);
     }
     else{
       loginID=data;
-      pullUserProfile(uid,type,loginID);
-      pullUserWork(uid,type,loginID);
+      pullUserProfile(uid,type,loginID,filter,tag);
+      pullUserWork(uid,type,loginID,filter,tag);
     }
 
     //TBD:let filterby work with upper level filters
@@ -24,7 +27,7 @@ $('document').ready(function(){
       $('.select-posts').addClass('style-selected-underline');
       $('.select-collect').removeClass('style-selected-underline');
       console.log(type);
-      pullUserWork(uid,type,loginID);
+      pullUserWork(uid,type,loginID,filter,tag);
     });
 
     $('.select-collect').click(function(){
@@ -32,38 +35,44 @@ $('document').ready(function(){
       $('.select-posts').removeClass('style-selected-underline');
       $('.select-collect').addClass('style-selected-underline');    
       console.log(type);
-      pullUserWork(uid,type,loginID);
+      pullUserWork(uid,type,loginID,filter,tag);
     });
 
     $('#button-index-FilterBy').click(function(){
       var keyword=$('#input-filter').val();
-      pullUserWork(uid,type,loginID,'tag',keyword);
-      $('#button-index-All').addClass('selected');
-      $('#button-index-Images').removeClass('selected');
-      $('#button-index-Articles').removeClass('selected');
+      tag=keyword;
+      pullUserWork(uid,type,loginID,filter,tag);
+      // $('#button-index-All').addClass('selected');
+      // $('#button-index-Images').removeClass('selected');
+      // $('#button-index-Articles').removeClass('selected');
     });
 
 
     $('#button-index-All').click(function(){
-      pullUserWork(uid,type,loginID);    
+      filter=null;
+      tag=null;
+      pullUserWork(uid,type,loginID,filter,tag);    
       $('#button-index-All').addClass('selected');
       $('#button-index-Images').removeClass('selected');
       $('#button-index-Articles').removeClass('selected');
+      $('#input-filter').val('');
     });
 
 
     $('#button-index-Images').click(function(){
+      filter='images';
       $('#button-index-Images').addClass('selected');
       $('#button-index-All').removeClass('selected');
       $('#button-index-Articles').removeClass('selected');
-      pullUserWork(uid,type,loginID,'image');  
+      pullUserWork(uid,type,loginID,filter,tag);  
     });
 
     $('#button-index-Articles').click(function(){
+      filter='articles';
       $('#button-index-Articles').addClass('selected');
       $('#button-index-All').removeClass('selected');
       $('#button-index-Images').removeClass('selected');
-      pullUserWork(uid,type,loginID,'articles');  
+      pullUserWork(uid,type,loginID,filter,tag);  
     });
 
   }); 

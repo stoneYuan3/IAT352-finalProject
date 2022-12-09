@@ -10,35 +10,53 @@
 			//for index.html, pulling posts for index page once the page starts, and act accordingly based on user filter
 			case 'loadIndex':
 				//prepare query: pull post_id that are needed from database based on filter requirements
-				if(isset($_GET['filter'])){
-					$query1='SELECT post_id from posts';
-					$filter='';
+				$query_select="posts.post_id";
+				$query_from="posts";
+				$query_where="";			
+				if(isset($_GET['filter']) && $_GET['filter']!='none'){
+					// $query1='SELECT post_id from posts';
+					// $filter='';
 					switch($_GET['filter']){
 						case 'images':
-							$filter=' WHERE category=1';
+							$query_where.='posts.category=1';
 							break;
 						case 'articles':
-							$filter=' WHERE category=2';
+							$query_where.='posts.category=2';
 							break;
 						case 'follow':
 							if(isset($_GET['user'])){
 								$user=$_GET['user'];
-								$query1="SELECT posts.post_id FROM posts, (SELECT following.followed_user_id FROM following WHERE following.user_id=".$user.") AS idsrc WHERE posts.user_id=idsrc.followed_user_id";	
+								$query_from.=",(SELECT following.followed_user_id FROM following WHERE following.user_id=".$user.") AS idsrc";
+								$query_where.="posts.user_id=idsrc.followed_user_id";
+								// $query1="SELECT posts.post_id FROM posts, (SELECT following.followed_user_id FROM following WHERE following.user_id=".$user.") AS idsrc WHERE posts.user_id=idsrc.followed_user_id";	
 							}
 							break;
 					}
-					$query1.=$filter;
-					$query1.=" ORDER BY upload_time DESC";
 				}
 				
-				elseif(isset($_GET['tag'])){
-					$query1="SELECT posts.post_id FROM posts, tags WHERE tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
+				if(isset($_GET['tag']) && $_GET['tag']!='none'){
+					// "SELECT posts.post_id FROM posts, tags WHERE tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id"
+					$query_from.=",tags";
+					if($query_where==""){
+						$query_where.="tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
+					}
+					else{
+					$query_where.=" AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
+					}
 				}
 
-				//prepare query: pull all if no filter is set
-				else{
-					$query1="SELECT post_id from posts ORDER BY upload_time DESC";
+				$query_where.=" ORDER BY upload_time DESC";
+				if($query_where==" ORDER BY upload_time DESC"){
+					$query1="SELECT ".$query_select." FROM ".$query_from." ".$query_where;
 				}
+				else{
+					$query1="SELECT ".$query_select." FROM ".$query_from." WHERE ".$query_where;
+				}
+				
+				//prepare query: pull all if no filter is set
+				// else{
+				// 	$query1="SELECT post_id from posts ORDER BY upload_time DESC";
+				// }
 
 				//use the query prepared above to pull the list of post_id, and put in an array for future use
 				$result1=$database->query($query1);
@@ -107,12 +125,12 @@
 						//TBD: error handling: set an else{} statement to cover cases where type does not equal to any of those values stated above
 
 						//if user is filtering by tag, add corresponding commands to the query
-						if(isset($_GET['tag'])){
+						if(isset($_GET['tag']) && $_GET['tag']!='none'){
 							$query_from.=",tags";
 							$query_where.=" AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
 						}
 						//if user is filtering by image/article type, add corresponding commands to the query
-						if(isset($_GET['filter'])){
+						if(isset($_GET['filter']) && $_GET['filter']!='none'){
 							$filter='';
 							switch($_GET['filter']){
 								case 'images':
@@ -140,13 +158,6 @@
 
 					///////////////////////////////////////////////////////
 					$v2=pullPosts($output_postID_list,$database);
-					//load posts step 3: render the information got from step 2 to html layout with generatePosts(). check functions.php
-					// if($listof_rawPost!=null){
-					// 	$v2=generatePosts($listof_rawPost['main'],$listof_rawPost['img'],$listof_rawPost['commentNum'],$listof_rawPost['collectNum']);	
-					// }
-					// else{
-					// 	$v2='<p class="section-empty">this user doesnt have any posts under this category!</p>';
-					// }
 					//////////////////////////////////////////////////////
 
 
