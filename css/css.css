@@ -439,7 +439,10 @@ h1{
 .index .top{
     margin-bottom: 2em;
 }
-
+.top{
+    margin-bottom: 2rem !important;
+    margin-top: 5rem !important;
+}
 .index label, .profile .post label, .user-profile .post label{
     font-size: 22px;
     margin-right: 1em;
@@ -520,6 +523,7 @@ h1{
 /* upload */
 .upload{
     margin: 5em;
+    margin-top: 1rem;
 }
 
 .upload .top{

@@ -20,14 +20,14 @@
             </div>
         </section>
 
-        <form class="upload" role="form" enctype="multipart/form-data">
-            <section class="top">
-                <h1>Content Upload</h1>
-                <label>I want to post:</label> 
-                <a class="select-page">Image</a>
-                <a class="unselect-page" href="upload-thought.html">Thoughts</a>
-            </section>
-            
+        <section class="upload top">
+            <h1>Content Upload</h1>
+            <label>I want to post:</label> 
+            <a id="post_image" class="select-page">Image</a>
+            <a id="post_article" class="unselect-page">Thoughts</a>
+        </section>
+
+        <form id="form-newpost" class="upload" role="form" enctype="multipart/form-data">
             <!-- reference: https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_input_accept -->
             <div class="flex upload-image-box">
                 <input type="file" id="img" name="img" accept="image/*" >
