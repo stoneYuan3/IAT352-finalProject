@@ -306,7 +306,7 @@ function pullUserWork(uid,type,loginID,filterBy,keyword){
 	var filter='&filter=none';
 	var tag='&tag=none';
 	switch(filterBy){
-		case 'image':
+		case 'images':
 			filter='&filter=images';
 			break;
 		case 'articles':
