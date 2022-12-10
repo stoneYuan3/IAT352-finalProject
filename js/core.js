@@ -143,6 +143,9 @@ function pullUserProfile(uid,type,loginID){
 			var result=JSON.parse(data);
 			$('.user-basicInfo').html(result.bio);	
 
+			var user_name=$('.section-userInfo-text h1').html();
+			$('.select-collect').html(user_name+'\'s Collection');
+
 			// this part check if the user is logged in and whether this profile is owned by the member, remove follow button if true
 			var userid=loginID;
 			if(userid==null){

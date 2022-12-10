@@ -92,7 +92,6 @@
 			session_destroy();
 		}
 
-
 		if($_GET['query']=='pullUserInfo'){
 			if(isset($_GET['userid'])){
 				$userid=$_GET['userid'];
