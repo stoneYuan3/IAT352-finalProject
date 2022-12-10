@@ -75,7 +75,61 @@
 					}
 
 					break;
+			}	
+		}
+
+		if($_GET['query']='editProfile'){
+			if(isset($_GET['userid'])){
+				$userid=$_GET['userid'];
+				// $avatar=null;
+				// $cover=null;
+				// $name=null;
+				// $email=null;
+				// $listof_edit=[];
+				$success=false;
+				if(isset($_FILES['avatar'])){ 
+					$avatar=$_FILES['avatar'];
+					$file_name=$avatar['name'];
+					$file_tempLink=$avatar['tmp_name'];
+					$moveimage=move_uploaded_file($file_tempLink, "../uploads/images/".$file_name);		
+					if($moveimage){
+						$query="UPDATE users SET avatar = '".$file_name."' WHERE user_id = ".$userid;
+						$result=$database->query($query);
+						if($result){$success=true;}
+					}					 
+				}
+				if(isset($_FILES['cover'])){ 
+					$cover=$_FILES['cover']; 
+					$file_name=$cover['name'];
+					$file_tempLink=$cover['tmp_name'];
+					$moveimage=move_uploaded_file($file_tempLink, "../uploads/images/".$file_name);		
+					if($moveimage){
+						$query="UPDATE users SET album_cover = '".$file_name."' WHERE user_id = ".$userid;
+						$result=$database->query($query);
+						if($result){$success=true;}
+					}									
+				}
+				if(isset($_POST['name'])){ 
+					$name=$_POST['name']; 
+					$query="UPDATE users SET user_name = '".$name."' WHERE user_id = ".$userid;
+					$result=$database->query($query);
+					if($result){$success=true;}					
+				}
+				if(isset($_POST['email'])){ 
+					$email=$_POST['email'];
+					$query="UPDATE users SET email = '".$email."' WHERE user_id = ".$userid;
+					$result=$database->query($query);
+					if($result){$success=true;}						
+				}
+
+				if($success){
+					echo 'success';
+				}
+				if(!$success){
+					echo 'fail';
+				}
 			}
 		}
+
 	}
 ?>

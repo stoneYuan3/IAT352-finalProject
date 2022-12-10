@@ -154,6 +154,92 @@ function pullUserProfile(uid,type,loginID){
 			else if(userid==uid){
 				console.log('logged in as the owner of this profile');
 				$('#button-index-Following').remove();
+
+				//TBD, edit profile
+				$('<button id="profile-edit">Edit Profile</button>').insertAfter('.follower');
+				$('#profile-edit').click(function(){
+					var form_edit=`
+						<div class="flex section-form-edit">
+							<form method="POST" class="flex flex-column" id="form-editProfile">
+								<div class="flex flex-row form-titlebar">
+									<h1>Edit Profile</h1>
+									<a id="form-quit">Cancel</a>
+								</div>
+						        <div class="flex flex-column upload-image-box">
+						        	<label for="avatar">Update Avatar</label>
+						            <input type="file" id="avatar" name="img" accept="image/*" >
+						        </div>
+
+						        <div class="flex flex-column upload-image-box">
+						        	<label for="cover">Update Album Cover</label>
+						            <input type="file" id="cover" name="img" accept="image/*" >
+						        </div>
+
+						        <label for="user_name">Update User Name</label>
+						        <input type="text" id="user_name">
+
+						        <label for="user_email">Update Email</label>
+						        <input type="text" id="user_email">
+
+						        <button id="button-work-upload" class="selected" value="submit" type="submit"><strong>Submit</strong></button>
+							</form>
+						</div>
+					`;
+					$(form_edit).insertAfter('body');
+					$('#form-quit').click(function(){
+						$('.section-form-edit').remove();
+					});
+					$('#form-editProfile').submit(function(event){
+						event.preventDefault();
+						console.log('submitted');
+						var editList=new FormData();
+
+						var avatar=$('#avatar').prop('files')[0];
+						var album=$('#cover').prop('files')[0];
+						var username=$('#user_name').val();
+						var userEmail=$('#user_email').val();
+						var listof_editOption=[avatar,album,username,userEmail];
+						var list_name=['avatar','cover','name','email'];
+						var formComplete=false;
+						for(let i=0;i<listof_editOption.length;i++){
+							if(listof_editOption[i]){
+								editList.append(list_name[i],listof_editOption[i]);
+								formComplete=true;
+							}
+						}
+						if(formComplete){
+							console.log(editList);
+							var editSubmit=$.ajax({
+								type:'POST',
+								url:'server/upload.php?query=editProfile&userid='+userid,
+								data:editList,
+								dataType:'text',
+	              				contentType: false,
+              					processData: false,
+              				});
+              				editSubmit.done(
+              					function(data){
+									if(data=='success'){
+										console.log('edit success');
+										pullUserProfile(uid,type,loginID);
+										adjustNavigation(loginID);
+										$('.section-form-edit').remove();
+										// window.location.replace("index.html");
+										// console.log(data);
+									}
+									else{
+										console.log('edit failed');
+										console.log(data);
+									}
+								}
+							);									
+						}
+						else{
+		       				 $('<p class="style-warning">You haven\'t change anything.</p>').insertBefore('#button-work-upload');
+						}
+					});
+				});
+
 			}
 			else{
 				//this part check if the target user is already been followed by the viewer
