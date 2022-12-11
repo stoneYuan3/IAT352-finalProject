@@ -179,6 +179,8 @@ figure img, img{
     border-radius: 2rem;
     margin-bottom: 1rem;
 }
+
+
 @media screen and (max-width: 1000px) and (min-width:800px){
     .section-userWorkDisplay{
         columns: 3;
