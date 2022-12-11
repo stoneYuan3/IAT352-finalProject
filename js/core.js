@@ -178,9 +178,6 @@ function pullUserProfile(uid,type,loginID){
 						        <label for="user_name">Update User Name</label>
 						        <input type="text" id="user_name">
 
-						        <label for="user_email">Update Email</label>
-						        <input type="text" id="user_email">
-
 						        <button id="button-work-upload" class="selected" value="submit" type="submit"><strong>Submit</strong></button>
 							</form>
 						</div>

@@ -103,10 +103,13 @@
     }
 
     //generate post detail page for detail.html
-    function generatePostDetail($array1,$array2,$array3){
+    function generatePostDetail($array1,$array2,$array3,$output_view){
         $output1=$array1;
         $output_arr_img=$array2;
         $output_arr_comment=$array3;
+        //Gets view count number, or if no result returned because no views yet return 1
+        $viewCount = isset($output_view['view_count']) ? $output_view['view_count'] : 1;
+
         $v1='';
         //for image post
         if($output1['category']==1){
@@ -134,7 +137,7 @@
                 <img src="img/icon-comment.svg">'.$output_arr_comment['comment_num'].'
             </button>
 
-            <label class="view">13452 views</label>
+            <label class="view">'.$viewCount.' views</label>
 
             <section class="tags">
             </section>
@@ -159,7 +162,7 @@
             <label>'.$output1['collec_num'].'</label>
             <img src="img/comment.png">
             <label>'.$output_arr_comment['comment_num'].'</label>
-            <label class="view">13452 views</label>
+            <label class="view">'.$viewCount.' views</label>
             <section class="tags">
             </section>
             <br><img src="uploads/images/'.$output1['avatar'].'">

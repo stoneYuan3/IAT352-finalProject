@@ -1,7 +1,7 @@
 <?php
+session_start();
 	include('functions.php');
 	$database=db_connect($dbhost,$dbuser,$dbpass,$dbname);
-	// session_start();
 
 	//activate when a request is received from javascript
 	if(isset($_GET['query'])){
@@ -169,9 +169,10 @@
 				}
 				break;
 
-			//for detai.html
+			//for detail.html
 			case 'loadPostDetail':
 				if(isset($_GET['post'])){
+
 					$post_id=$_GET['post'];
 					//prepare query for major components
 					$query_main="SELECT posts.post_id,posts.category,COUNT(collection.post_id) AS collec_num,posts.description,users.user_id,users.user_name,users.avatar FROM posts,collection,users WHERE posts.post_id=".$post_id." AND posts.post_id=collection.post_id AND posts.user_id=users.user_id";
@@ -185,6 +186,11 @@
 					$query_commNum="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$post_id."' AND posts.post_id=comments.post_id;";	
 					$result_commNum=$database->query($query_commNum);
 					$output_commNum=$result_commNum->fetch_assoc();
+
+					$query_viewCount="SELECT views.view_count FROM posts,views WHERE posts.post_id='".$post_id."' AND posts.post_id=views.post_id;";
+					$result_view=$database->query($query_viewCount);
+					$output_view=$result_view->fetch_assoc();
+
 
 					$query_tag="SELECT posts.post_id,tags.tag_name FROM posts,tags WHERE posts.post_id=".$post_id." AND posts.post_id=tags.post_id";
 					$result_tag=$database->query($query_tag);
@@ -243,12 +249,38 @@
 	                    }
 	                    $output_main=array_merge($output_main,$output_checkCollect);
 	                    // print_r($output_main);
-	                }          
+	                }
 
-					$v1=generatePostDetail($output_main,$output_img,$output_commNum);
+					$v1=generatePostDetail($output_main,$output_img,$output_commNum,$output_view);
 					$v_uploaderid=$output_main['user_id'];
 					//different parts of the page are pulled in different queries. after pulled, the pulled data will be stroed in corresponding arrays. those arrays will be put into one final array and sent back to the front end
 					$arr=['main'=>$v1, 'tag'=>$v2, 'comment'=>$output_comment_final, 'uploader'=>$v_uploaderid];
+
+
+						// View Count increment based on session, added by Kai-Lee MacBain
+						// Adds a view count to the table for the current post id, but only if the current browsing session hasn't already incremented it yet
+						// (So people can't keep refreshing the page to spam view count)
+							// Help understanding how to view the network inspector window so I can find what error the code is throwing from Bri MacBain
+							// Solution for error found here: https://stackoverflow.com/questions/18797251/notice-unknown-skipping-numeric-key-1-in-unknown-on-line-0
+						if(isset($_SESSION["viewcount_".$post_id])){
+							// Do nothing - we've already viewed this post, and a session variable has been created to remember that and not increment view count further
+						}
+						// Otherwise we need to increment the view counter table for this post and set a session variable to prevent multiple view counts in same session for same post
+						else{
+							// Insert a new row into Views table for the post id, or update the row if a view count for post id already exists
+							$query_viewCountIncrement = "
+							INSERT INTO views (post_id, view_count)
+							VALUES (".$post_id.", 1)
+							ON DUPLICATE KEY UPDATE view_count = view_count + 1;";
+							$result_viewCount=$database->query($query_viewCountIncrement);
+
+							// Now set session variable for this post id view count, so we don't keep repeating view increments for this session
+							// Code for how to avoid repeat counts for the same session from:
+							// https://stackoverflow.com/questions/12778277/avoid-page-counting-when-click-refresh-button
+							$_SESSION["viewcount_".$post_id] = 1;
+						}
+
+
 					echo json_encode($arr);
 				}		
 				break;
