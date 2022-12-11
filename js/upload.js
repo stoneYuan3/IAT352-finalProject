@@ -1,3 +1,4 @@
+
 var form_post_image=`
             <div class="flex upload-image-box">
                 <input type="file" id="img" name="img" accept="image/*" >
@@ -30,7 +31,7 @@ $('document').ready(function(){
 	console.log('post by '+uid);  
 
 	var category=1;	
-
+	//swap form layout when user asks so
 	$('#post_image').click(function(event){
 		category=1;
 		$('#form-newpost').html(form_post_image);
@@ -58,6 +59,7 @@ $('document').ready(function(){
 		//https://stackoverflow.com/questions/17834243/how-to-read-formdata-object-in-php
 		//https://stackoverflow.com/questions/12281775/get-data-from-file-input-in-jquery
 		var data=new FormData();
+		//check if form complete
 		var formComplete=true;
 		if(category==1){
 			var image=$('#img').prop('files')[0];
@@ -72,10 +74,9 @@ $('document').ready(function(){
 				formComplete=false;
 				console.log('no text typed');
 				$('<p class="style-warning">Please type something</p>').insertBefore('.upload-des-box');
-				// console.log($('#tags').val());
 			}
 		}
-
+		//send to backend
 		if(formComplete){
 			var link;
 			if(category==1){

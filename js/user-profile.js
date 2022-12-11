@@ -19,9 +19,6 @@ $('document').ready(function(){
       pullUserWork(uid,type,loginID,filter,tag);
     }
 
-    //TBD:let filterby work with upper level filters
-    //idea: set type, filter, keyword as global variables. whenever user click something, set those variables to corresponding values (i.e, click image set filter=image), send all variables to backend whenever something is clicked)
-
     $('.select-posts').click(function(){
       type="posts";
       $('.select-posts').addClass('style-selected-underline');
@@ -42,9 +39,6 @@ $('document').ready(function(){
       var keyword=$('#input-filter').val();
       tag=keyword;
       pullUserWork(uid,type,loginID,filter,tag);
-      // $('#button-index-All').addClass('selected');
-      // $('#button-index-Images').removeClass('selected');
-      // $('#button-index-Articles').removeClass('selected');
     });
 
 

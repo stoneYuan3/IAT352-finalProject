@@ -6,6 +6,7 @@
 	if(isset($_GET['query'])){
 		//do accordingly based on the type of request
 		switch($_GET['query']){
+			//in case where user want to follow somebody
 			case 'registerFollow':
 				if(isset($_GET['follower']) && isset($_GET['followtarget'])){
 					$follower=$_GET['follower'];
@@ -21,6 +22,8 @@
 					}
 				}
 				break;
+
+			//in case when user want to cancel follow somebody
 			case 'cancelFollow':
 				if(isset($_GET['follower']) && isset($_GET['followtarget'])){
 					$follower=$_GET['follower'];
@@ -35,6 +38,8 @@
 					}					
 				}				
 				break;
+
+			//check if a following relationship exists, help to assign correct interface in frontend
 			case 'checkFollow':
 				if(isset($_GET['follower']) && isset($_GET['followtarget'])){
 					$follower=$_GET['follower'];

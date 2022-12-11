@@ -14,8 +14,7 @@
 				$query_from="posts";
 				$query_where="";			
 				if(isset($_GET['filter']) && $_GET['filter']!='none'){
-					// $query1='SELECT post_id from posts';
-					// $filter='';
+
 					switch($_GET['filter']){
 						case 'images':
 							$query_where.='posts.category=1';
@@ -28,12 +27,10 @@
 								$user=$_GET['user'];
 								$query_from.=",(SELECT following.followed_user_id FROM following WHERE following.user_id=".$user.") AS idsrc";
 								$query_where.="posts.user_id=idsrc.followed_user_id";
-								// $query1="SELECT posts.post_id FROM posts, (SELECT following.followed_user_id FROM following WHERE following.user_id=".$user.") AS idsrc WHERE posts.user_id=idsrc.followed_user_id";	
 							}
 							break;
 					}
-				}
-				
+				}			
 				if(isset($_GET['tag']) && $_GET['tag']!='none'){
 					// "SELECT posts.post_id FROM posts, tags WHERE tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id"
 					$query_from.=",tags";
@@ -44,20 +41,14 @@
 					$query_where.=" AND tags.tag_name='".$_GET['tag']."' AND tags.post_id=posts.post_id";
 					}
 				}
-
 				$query_where.=" ORDER BY upload_time DESC";
 				if($query_where==" ORDER BY upload_time DESC"){
 					$query1="SELECT ".$query_select." FROM ".$query_from." ".$query_where;
 				}
 				else{
 					$query1="SELECT ".$query_select." FROM ".$query_from." WHERE ".$query_where;
-				}
-				
+				}			
 				//prepare query: pull all if no filter is set
-				// else{
-				// 	$query1="SELECT post_id from posts ORDER BY upload_time DESC";
-				// }
-
 				//use the query prepared above to pull the list of post_id, and put in an array for future use
 				$result1=$database->query($query1);
 				$output_postID_list=[];
@@ -65,6 +56,7 @@
 					$output_each=$result1->fetch_row();
 					array_push($output_postID_list,$output_each[0]);
 				}
+				//once received the list of post id, call a function to further pull the details of those post id and then generate the html layout 
 				$output_final=pullPosts($output_postID_list,$database);
 				echo json_encode($output_final);
 				break;
@@ -178,17 +170,21 @@
 					$result_main=$database->query($query_main);
 					$output_main=$result_main->fetch_assoc();
 					
+					//prepare image query
 					$query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$post_id."' AND posts.post_id=images.post_id;";	
 					$result_img=$database->query($query_img);
 					$output_img=$result_img->fetch_assoc();
 
+					//prepare comment number query
 					$query_commNum="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$post_id."' AND posts.post_id=comments.post_id;";	
 					$result_commNum=$database->query($query_commNum);
 					$output_commNum=$result_commNum->fetch_assoc();
 
+					//prepare tag query
 					$query_tag="SELECT posts.post_id,tags.tag_name FROM posts,tags WHERE posts.post_id=".$post_id." AND posts.post_id=tags.post_id";
 					$result_tag=$database->query($query_tag);
 					$output_tag=[];
+
 					//pull data
 					for($i=0;$i<$result_tag->num_rows;$i++){
 						$output_tag_each=$result_tag->fetch_assoc();
@@ -205,7 +201,7 @@
 					}
 					$v2.= '</p>';
 
-					//prepare query for comments
+					//prepare query for list of comments
 					$query_comment="SELECT posts.post_id,users.user_id,users.avatar,users.user_name,comments.content,comments.upload_time FROM posts,users,comments WHERE posts.post_id=".$post_id." AND posts.post_id=comments.post_id AND users.user_id=comments.user_id";
 					$result_comment=$database->query($query_comment);
 					$output_comment=[];
@@ -232,6 +228,7 @@
 	                    array_push($output_comment_final,$v);
 					}
 
+					//check if this post is collected, helps to assign correct style to collection button
 	                if(isset($_GET['loginID'])){
 	                    $loginID=$_GET['loginID'];
 
@@ -242,7 +239,6 @@
 	                        $output_checkCollect=['collected'=>'no'];
 	                    }
 	                    $output_main=array_merge($output_main,$output_checkCollect);
-	                    // print_r($output_main);
 	                }          
 
 					$v1=generatePostDetail($output_main,$output_img,$output_commNum);
@@ -261,7 +257,6 @@
 					//by Winkie
                     $query_addCollection = "INSERT INTO collection (user_id, post_id)";
                     $query_addCollection.=" VALUES(?,?)";
-                    
                     $stmt=$database->prepare($query_addCollection);
                     $stmt->bind_param('ii',$userid,$post_id);
                     if($stmt->execute()){ echo 'success'; }

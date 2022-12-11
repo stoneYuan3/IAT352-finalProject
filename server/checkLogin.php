@@ -92,6 +92,7 @@
 			session_destroy();
 		}
 
+		//pull user info including their avatar and use to customlize the navigation bar
 		if($_GET['query']=='pullUserInfo'){
 			if(isset($_GET['userid'])){
 				$userid=$_GET['userid'];

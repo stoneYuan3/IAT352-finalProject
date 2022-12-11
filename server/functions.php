@@ -108,7 +108,7 @@
         $output_arr_img=$array2;
         $output_arr_comment=$array3;
         $v1='';
-        //for image post
+        //generate image post if category=image
         if($output1['category']==1){
             $v1= '
             <section class="section-detail-mainContent">
@@ -147,7 +147,7 @@
             </section>                      
             ';          
         }
-        //for article post
+        //generate article post if category=article
         else{
             $v1= '
             <section class="section-detail-mainContent">
@@ -170,7 +170,6 @@
             </section>                      
             ';             
         }
-        //return the array $final_result
         return $v1;     
     }
 
@@ -178,9 +177,7 @@
         $output1_arr=$list_of_postID;
         $listof_posts_raw=[];
         if(count($output1_arr)==0){
-            // return null;
             return '<p class="section-empty">There are no posts under this category!</p>';
-            //TBD, place a placeholder text saying that nothing matches with your query
         }
         else{
             //pull the actual post content based on post_id
@@ -191,16 +188,20 @@
             //output1_arr contains the list of post id. the function below take those post id and render the entire post box based on the post id
             for($i=0;$i<count($output1_arr);$i++){
                 $id=$output1_arr[$i];
+
                 //pull main components
                 $query_main="SELECT posts.post_id,posts.category,users.avatar,users.user_name,users.user_id,posts.upload_time,posts.description,COUNT(collection.post_id) AS collec_num FROM posts,users,images,collection WHERE posts.post_id='".$id."' AND posts.user_id=users.user_id AND posts.post_id=collection.post_id";
                 $query_collection="SELECT COUNT(collection.post_id) AS collec_num FROM collection,posts WHERE posts.post_id='".$id."' AND posts.post_id=collection.post_id";
+
                 //pull image
                 $query_img="SELECT images.image_content FROM posts,images WHERE posts.post_id='".$id."' AND posts.post_id=images.post_id;"; 
+
                 //pull comment number
                 $query_comment="SELECT COUNT(comments.post_id) AS comment_num FROM posts,comments WHERE posts.post_id='".$id."' AND posts.post_id=comments.post_id;";                           
                 $result_main=$database->query($query_main);
                 $output_main=$result_main->fetch_assoc();
 
+                //pull collection number
                 $result_collect=$database->query($query_collection);
                 $output_collect=$result_collect->fetch_assoc();                     
                 //check if this post is collected, add the result to the array
@@ -228,20 +229,18 @@
                 array_push($output_arr_img, $output_img);
                 array_push($output_arr_commentNum, $output_comment);                        
             }
-
+            //generatePost() takes four arrays, one being the major parts of the post, image being..image used in the post. commentNum being number of comments, collectNum being number of collection. Those 4 elements have to be placed in exact order.
             return generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum,$output_arr_collectNum);
 
-            // $listof_posts_raw=['main'=>$output_arr_main,'img'=>$output_arr_img,'commentNum'=>$output_arr_commentNum,'collectNum'=>$output_arr_collectNum];
-            // return $listof_posts_raw;
 
             //categolary 1 is image, 2 is pure text
             //instead of echoing raw html, the generated html layout is now transfered back to frontend in JSON format. JSON format allows more flexible manipulation for the front end.
-            // echo json_encode(generatePosts($output_arr_main,$output_arr_img,$output_arr_commentNum,$output_arr_collectNum));
+   
         }    
     }
 
 
-
+    //check if a post is being collected by an user. used to assign correct style to the collection button everytime the page loads
     function isCollected($userid,$post_id,$database){
         $query_checkCollect="SELECT user_id,post_id FROM collection WHERE user_id=".$userid." AND post_id=".$post_id;
         $result_checkCollect=$database->query($query_checkCollect);
