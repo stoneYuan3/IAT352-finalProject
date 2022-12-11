@@ -246,12 +246,8 @@ session_start();
 	                        $output_checkCollect=['collected'=>'no'];
 	                    }
 	                    $output_main=array_merge($output_main,$output_checkCollect);
-<<<<<<< HEAD
 	                }          
-=======
-	                    // print_r($output_main);
-	                }
->>>>>>> 6c3b4ac9711a45360bc6199c8df0a65f4a9f00bf
+	
 
 					$v1=generatePostDetail($output_main,$output_img,$output_commNum,$output_view);
 					$v_uploaderid=$output_main['user_id'];
